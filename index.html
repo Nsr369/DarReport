@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="ml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3f51b5">
+
+    <!-- Google Fonts: Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Soft Islamic Minimal Palette */
+            --primary: #355e3b;
+            /* Sage/Forest Green */
+            --primary-light: #e8f4ec;
+            /* Soft Mint Hover */
+            --primary-dark: #2a4b2f;
+            --bg-color: #faf8f5;
+            /* Warm Cream */
+            --surface-color: #ffffff;
+            --text-primary: #2d3748;
+            /* Dark Charcoal (softer than black) */
+            --text-secondary: #4a5568;
+            --border-color: #e2e8f0;
+            --shadow-1: 0 4px 12px rgba(46, 92, 70, 0.04);
+            /* Soft, diffused shadow */
+            --shadow-2: 0 8px 24px rgba(46, 92, 70, 0.08);
+            /* Elevated hover shadow */
+            --radius-md: 16px;
+            /* Increased for softer card corners */
+            --radius-sm: 8px;
+            /* Modern input corners */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23355e3b' stroke-width='1.5' stroke-opacity='0.15'%3E%3Cpath d='M 50 15 L 60 30 L 85 30 L 70 50 L 85 70 L 60 70 L 50 85 L 40 70 L 15 70 L 30 50 L 15 30 L 40 30 Z'/%3E%3Cpath d='M 0 15 L 10 30 L 0 50 M 0 85 L 10 70 L 0 50'/%3E%3Cpath d='M 100 15 L 90 30 L 100 50 M 100 85 L 90 70 L 100 50'/%3E%3Cpath d='M 15 0 L 30 10 L 50 0 M 85 0 L 70 10 L 50 0'/%3E%3Cpath d='M 15 100 L 30 90 L 50 100 M 85 100 L 70 90 L 50 100'/%3E%3Cpath d='M 60 30 L 70 10'/%3E%3Cpath d='M 40 30 L 30 10'/%3E%3Cpath d='M 60 70 L 70 90'/%3E%3Cpath d='M 40 70 L 30 90'/%3E%3Cpath d='M 30 60 L 10 70'/%3E%3Cpath d='M 30 40 L 10 30'/%3E%3Cpath d='M 70 60 L 90 70'/%3E%3Cpath d='M 70 40 L 90 30'/%3E%3C/g%3E%3C/svg%3E");
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 24px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 500;
+            margin-bottom: 28px;
+            color: var(--primary);
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        h3 {
+            font-size: 19px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        h4 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            background: var(--surface-color);
+            padding: 28px;
+            margin-bottom: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(46, 92, 70, 0.05);
+            /* Very subtle borderline */
+            box-shadow: var(--shadow-1);
+            transition: box-shadow 0.3s cubic-bezier(.25, .8, .25, 1), transform 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: var(--shadow-2);
+            transform: translateY(-2px);
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        input:not([type="radio"]):not([type="checkbox"]) {
+            width: 100%;
+            padding: 13px 16px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: #fcfbf9;
+            /* Slightly tinted input field */
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+            background-color: var(--surface-color);
+        }
+
+        /* Hide default datalist arrow in Chrome/Safari to prevent confusion on Android */
+        input::-webkit-calendar-picker-indicator,
+        input::-webkit-list-button {
+            display: none !important;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Material Buttons -> Flat Minimal Pill Buttons */
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        button {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border-radius: 50px;
+            /* Pill shape */
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(46, 92, 70, 0.15);
+            /* Soft button shadow */
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(46, 92, 70, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 3px rgba(46, 92, 70, 0.1);
+        }
+
+        button:disabled {
+            background-color: #e2e8f0;
+            color: #a0aec0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Add more button style overrides */
+        button[onclick^="addBayah"],
+        button[onclick^="addDynamicInput"] {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            box-shadow: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        button[onclick^="addBayah"]:hover,
+        button[onclick^="addDynamicInput"]:hover {
+            background-color: #d1ebd9;
+            box-shadow: none;
+        }
+
+        button[onclick*="remove"] {
+            background-color: #fce8e8;
+            color: #d32f2f;
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: 50px;
+            font-weight: 500;
+            box-shadow: none;
+        }
+
+        button[onclick*="remove"]:hover {
+            background-color: #fad1d1;
+            transform: none;
+        }
+
+        /* Radio Buttons */
+        input[type="radio"] {
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            vertical-align: text-bottom;
+            cursor: pointer;
+        }
+
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 0;
+            margin-right: 24px;
+            font-size: 15px;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        /* Preview Document Box */
+        pre {
+            white-space: pre-wrap;
+            background: #ffffff;
+            color: var(--text-primary);
+            padding: 24px 30px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            /* Document accent line */
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-top: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            overflow-x: auto;
+        }
+
+        /* ── Sortable Section Cards ── */
+        #sortableOutput {
+            margin-top: 24px;
+            display: none;
+        }
+
+        .sort-hint {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+
+        .section-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            box-shadow: 0 2px 6px rgba(46, 92, 70, 0.05);
+            transition: box-shadow 0.2s ease, transform 0.15s ease;
+            cursor: default;
+            position: relative;
+        }
+
+        .section-card.pinned {
+            border-left-color: #a0aec0;
+            background: #fafafa;
+        }
+
+        .section-card.dragging {
+            opacity: 0.45;
+            box-shadow: 0 8px 20px rgba(46, 92, 70, 0.18);
+        }
+
+        .section-card.drag-over {
+            border-top: 3px solid var(--primary);
+            transform: translateY(2px);
+        }
+
+        .drag-handle {
+            padding: 14px 10px 14px 14px;
+            cursor: grab;
+            color: #c0ccd8;
+            font-size: 18px;
+            user-select: none;
+            flex-shrink: 0;
+            touch-action: none;
+            line-height: 1;
+            align-self: center;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .section-card.pinned .drag-handle {
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
+
+        .section-card-body {
+            flex: 1;
+            padding: 14px 18px 14px 4px;
+            white-space: pre-wrap;
+            font-family: inherit;
+            font-size: 14.5px;
+            line-height: 1.65;
+            color: var(--text-primary);
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .bayah-entry {
+            background: #ffffff !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: var(--radius-md);
+            padding: 18px !important;
+            margin-bottom: 16px !important;
+            box-shadow: none;
+            position: relative;
+        }
+
+        .schedule-mode .hide-on-schedule {
+            display: none !important;
+        }
+
+        /* History Section Styles */
+        .history-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-2);
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 24px;
+            transition: transform 0.2s ease;
+        }
+
+        .history-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .history-panel {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100vh;
+            background: var(--surface-color);
+            box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1001;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .history-panel.open {
+            right: 0;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .history-header h3 {
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+
+        .close-history {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            box-shadow: none;
+            width: auto;
+            height: auto;
+        }
+
+        .close-history:hover {
+            background: none;
+            color: var(--primary);
+            box-shadow: none;
+            transform: none;
+        }
+
+        .history-item {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fcfbf9;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .history-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .history-item-title {
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .history-item-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .delete-history-btn {
+            background: none;
+            border: none;
+            color: #d32f2f;
+            cursor: pointer;
+            padding: 4px;
+            font-size: 16px;
+            border-radius: 4px;
+            opacity: 0.7;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        .delete-history-btn:hover {
+            opacity: 1;
+            background: #fce8e8;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .history-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .history-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Report</h2>
+
+        <div class="radio-group" style="margin-bottom: 20px; text-align: center;">
+            <label><input type="radio" name="modeType" value="report" checked
+                    onchange="document.body.classList.remove('schedule-mode')"> Report Mode</label>
+            <label><input type="radio" name="modeType" value="schedule"
+                    onchange="document.body.classList.add('schedule-mode')"> Schedule Mode</label>
+        </div>
+
+        <label>തീയതി</label>
+        <input type="date" id="date">
+
+
+        <label>സ്ഥലം</label>
+        <select id="location" onchange="handleLocationChange()"
+            style="width: 100%; padding: 12px; margin-bottom: 24px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 15px; font-family: 'Roboto', sans-serif;">
+            <option value="ദാറുൽ കിറാം കാഞ്ഞങ്ങാട്">ദാറുൽ കിറാം കാഞ്ഞങ്ങാട്</option>
+            <option value="ദൗഹതുൽ കിറാം ഖത്തർ">ദൗഹതുൽ കിറാം ഖത്തർ</option>
+        </select>
+
+        <datalist id="nameList">
+            <option value="മുഹ്സിൻ കാഞ്ഞങ്ങാട്">
+            <option value="മുബാറക്ക് കാഞ്ഞങ്ങാട്">
+            <option value="നിസാർ കാഞ്ഞങ്ങാട്">
+            <option value="റിയാസ് കാഞ്ഞങ്ങാട്">
+            <option value="സഫ്‌വാൻ കാഞ്ഞങ്ങാട്">
+            <option value="അൻസൽ കാഞ്ഞങ്ങാട്">
+            <option value="ശാഹിദ് കാഞ്ഞങ്ങാട്">
+            <option value="അഷ്റഫ് കാഞ്ഞങ്ങാട്">
+            <option value="സത്താർ കാഞ്ഞങ്ങാട്">
+            <option value="ഷരീഫ് കാഞ്ഞങ്ങാട്">
+            <option value="സഫ്‌വാൻ കാഞ്ഞങ്ങാട്">
+            <option value="റാഷിദ് ഉദുമ">
+        </datalist>
+
+        <datalist id="dutyOptions">
+            <option value="الحزب السيفي">
+            <option value="الحزب الكبير">
+            <option value="المرتبة الصمدية 313-41">
+            <option value="المرتبة الصمدية 777-70">
+            <option value="المرتبة الصمدية 1117-117">
+            <option
+                value="٣٣/١٠٠ لمولانا الشيخ مختار علي محمد الدسوقي رضي الله عنه و مولانا الشيخ محمد عثمان عبده البرهاني رضي الله عنه">
+        </datalist>
+
+        <datalist id="surahList">
+            <option value="1. Al-Fatihah (الفاتحة)">
+            <option value="2. Al-Baqarah (البقرة)">
+            <option value="3. Ali 'Imran (آل عمران)">
+            <option value="4. An-Nisa (النساء)">
+            <option value="5. Al-Ma'idah (المائدة)">
+            <option value="6. Al-An'am (الأنعام)">
+            <option value="7. Al-A'raf (الأعراف)">
+            <option value="8. Al-Anfal (الأنفال)">
+            <option value="9. At-Tawbah (التوبة)">
+            <option value="10. Yunus (يونس)">
+            <option value="11. Hud (هود)">
+            <option value="12. Yusuf (يوسف)">
+            <option value="13. Ar-Ra'd (الرعد)">
+            <option value="14. Ibrahim (إبراهيم)">
+            <option value="15. Al-Hijr (الحجر)">
+            <option value="16. An-Nahl (النحل)">
+            <option value="17. Al-Isra (الإسراء)">
+            <option value="18. Al-Kahf (الكهف)">
+            <option value="19. Maryam (مريم)">
+            <option value="20. Taha (طه)">
+            <option value="21. Al-Anbiya (الأنبياء)">
+            <option value="22. Al-Hajj (الحج)">
+            <option value="23. Al-Mu'minun (المؤمنون)">
+            <option value="24. An-Nur (النور)">
+            <option value="25. Al-Furqan (الفرقان)">
+            <option value="26. Ash-Shu'ara (الشعراء)">
+            <option value="27. An-Naml (النمل)">
+            <option value="28. Al-Qasas (القصص)">
+            <option value="29. Al-'Ankabut (العنكبوت)">
+            <option value="30. Ar-Rum (الروم)">
+            <option value="31. Luqman (لقمان)">
+            <option value="32. As-Sajdah (السجدة)">
+            <option value="33. Al-Ahzab (الأحزاب)">
+            <option value="34. Saba (سبأ)">
+            <option value="35. Fatir (فاطر)">
+            <option value="36. Ya-Sin (يس)">
+            <option value="37. As-Saffat (الصافات)">
+            <option value="38. Sad (ص)">
+            <option value="39. Az-Zumar (الزمر)">
+            <option value="40. Ghafir (غافر)">
+            <option value="41. Fussilat (فصلت)">
+            <option value="42. Ash-Shura (الشورى)">
+            <option value="43. Az-Zukhruf (الزخرف)">
+            <option value="44. Ad-Dukhan (الدخان)">
+            <option value="45. Al-Jathiyah (الجاثية)">
+            <option value="46. Al-Ahqaf (الأحقاف)">
+            <option value="47. Muhammad (محمد)">
+            <option value="48. Al-Fath (الفتح)">
+            <option value="49. Al-Hujurat (الحجرات)">
+            <option value="50. Qaf (ق)">
+            <option value="51. Adh-Dhariyat (الذاريات)">
+            <option value="52. At-Tur (الطور)">
+            <option value="53. An-Najm (النجم)">
+            <option value="54. Al-Qamar (القمر)">
+            <option value="55. Ar-Rahman (الرحمن)">
+            <option value="56. Al-Waqi'ah (الواقعة)">
+            <option value="57. Al-Hadid (الحديد)">
+            <option value="58. Al-Mujadila (المجادلة)">
+            <option value="59. Al-Hashr (الحشر)">
+            <option value="60. Al-Mumtahanah (الممتحنة)">
+            <option value="61. As-Saff (الصف)">
+            <option value="62. Al-Jumu'ah (الجمعة)">
+            <option value="63. Al-Munafiqun (المنافقون)">
+            <option value="64. At-Taghabun (التغابن)">
+            <option value="65. At-Talaq (الطلاق)">
+            <option value="66. At-Tahrim (التحريم)">
+            <option value="67. Al-Mulk (الملك)">
+            <option value="68. Al-Qalam (القلم)">
+            <option value="69. Al-Haqqah (الحاقة)">
+            <option value="70. Al-Ma'arij (المعارج)">
+            <option value="71. Nuh (نوح)">
+            <option value="72. Al-Jinn (الجن)">
+            <option value="73. Al-Muzzammil (المزمل)">
+            <option value="74. Al-Muddaththir (المدثر)">
+            <option value="75. Al-Qiyamah (القيامة)">
+            <option value="76. Al-Insan (الإنسان)">
+            <option value="77. Al-Mursalat (المرسلات)">
+            <option value="78. An-Naba (النبأ)">
+            <option value="79. An-Nazi'at (النازعات)">
+            <option value="80. 'Abasa (عبس)">
+            <option value="81. At-Takwir (التكوير)">
+            <option value="82. Al-Infitar (الانفطار)">
+            <option value="83. Al-Mutaffifin (المطففين)">
+            <option value="84. Al-Inshiqaq (الانشقاق)">
+            <option value="85. Al-Buruj (البروج)">
+            <option value="86. At-Tariq (الطارق)">
+            <option value="87. Al-A'la (الأعلى)">
+            <option value="88. Al-Ghashiyah (الغاشية)">
+            <option value="89. Al-Fajr (الفجر)">
+            <option value="90. Al-Balad (البلد)">
+            <option value="91. Ash-Shams (الشمس)">
+            <option value="92. Al-Layl (الليل)">
+            <option value="93. Ad-Duha (الضحى)">
+            <option value="94. Ash-Sharh (الشرح)">
+            <option value="95. At-Tin (التين)">
+            <option value="96. Al-'Alaq (العلق)">
+            <option value="97. Al-Qadr (القدر)">
+            <option value="98. Al-Bayyinah (البينة)">
+            <option value="99. Az-Zalzalah (الزلزلة)">
+            <option value="100. Al-'Adiyat (العاديات)">
+            <option value="101. Al-Qari'ah (القارعة)">
+            <option value="102. At-Takathur (التكاثر)">
+            <option value="103. Al-'Asr (العصر)">
+            <option value="104. Al-Humazah (الهمزة)">
+            <option value="105. Al-Fil (الفيل)">
+            <option value="106. Quraysh (قريش)">
+            <option value="107. Al-Ma'un (الماعون)">
+            <option value="108. Al-Kawthar (الكوثر)">
+            <option value="109. Al-Kafirun (الكافرون)">
+            <option value="110. An-Nasr (النصر)">
+            <option value="111. Al-Masad (المسد)">
+            <option value="112. Al-Ikhlas (الإخلاص)">
+            <option value="113. Al-Falaq (الفلق)">
+            <option value="114. An-Nas (الناس)">
+        </datalist>
+
+        <div class="section">
+            <h3>ഇമാം / നേതൃത്വം</h3>
+
+            <label>മഗ്രിബ് ഇമാം</label>
+            <input list="nameList" id="maghrib">
+
+            <label>الواجب الشهري</label>
+            <div style="display: flex; gap: 8px;">
+                <input list="nameList" id="monthlyDuty" placeholder="നേതൃത്വം (പേര്)">
+                <input list="dutyOptions" id="monthlyDutyType" class="hide-on-schedule"
+                    placeholder="ഓപ്ഷൻ തിരഞ്ഞെടുക്കുക">
+            </div>
+
+            <label>الواجب العائلى</label>
+            <input list="nameList" id="family">
+            <div class="hide-on-schedule"
+                style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 24px;">
+                <h3>ഖുർആൻ & ഖസീദ</h3>
+
+                <label>സൂറത്ത്</label>
+                <input list="surahList" id="surahName">
+
+                <label>ഖുർആൻ പേജ് നമ്പർ</label>
+                <input id="surahPage">
+
+                <label>ആയത്ത് നമ്പർ</label>
+                <input id="ayah">
+
+                <label>ഖസീദ പേജ് നമ്പർ</label>
+                <input id="qPage">
+
+                <label>ബൈത് നമ്പർ</label>
+                <input id="baith">
+            </div>
+        </div>
+        <div class="section">
+            <h3>ദർസ്</h3>
+            <label>നടത്തുന്നവർ</label>
+            <input list="nameList" id="dars">
+
+            <label> അവലംബം</label>
+            <input id="darsRef">
+        </div>
+        <div class="section">
+            <h3>മുറാഖബ</h3>
+
+            <label>നേതൃത്വം</label>
+            <input list="nameList" id="muraqaba">
+        </div>
+
+        <div class="section">
+            <h3>ഹള്റ</h3>
+
+            <div class="radio-group" style="margin-bottom: 15px;">
+                <label><input type="radio" name="hadraType" value="full" checked> Full Hadra</label>
+                <label><input type="radio" name="hadraType" value="short"> Short Hadra</label>
+            </div>
+
+            <label>മസ്ഊലുൽഹള്റ</label>
+            <input list="nameList" id="masool">
+
+            <label>മുസ്തഫ്തിഹ്</label>
+            <input list="nameList" id="mustafthih">
+
+            <label>ബുസ്ത് 1 (main)</label>
+            <input list="nameList" id="bust1Main">
+
+            <label>ബുസ്ത് 1 (പങ്കെടുക്കുന്നവർ)</label>
+            <div id="bust1ListContainer">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input list="nameList" placeholder="പേര്">
+                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                </div>
+            </div>
+            <button type="button" onclick="addDynamicInput('bust1ListContainer')"
+                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                Add More</button>
+
+            <div id="madadSection">
+                <label>മദദ്</label>
+                <input list="nameList" id="madad">
+            </div>
+
+            <label>ഖസീദ 1</label>
+            <input list="nameList" id="q1">
+
+            <label>ഖസീദ 2</label>
+            <input list="nameList" id="q2">
+
+            <label>ഫർദാനി</label>
+            <input list="nameList" id="fardani">
+
+            <label>ബുസ്ത് 2 (main)</label>
+            <input list="nameList" id="bust2Main">
+
+            <label>ബുസ്ത് 2 (പങ്കെടുക്കുന്നവർ)</label>
+            <div id="bust2ListContainer">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input list="nameList" placeholder="പേര്">
+                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                </div>
+            </div>
+            <button type="button" onclick="addDynamicInput('bust2ListContainer')"
+                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                Add More</button>
+
+            <label>ഖസീദ 3</label>
+            <input list="nameList" id="q3">
+
+            <label>ഖസീദ 4</label>
+            <input list="nameList" id="q4">
+
+            <label>ഫവാത്തിഹ് & ദുആ</label>
+            <input list="nameList" id="dua">
+        </div>
+
+        <div class="section">
+            <h3>മുൻഷിദീങ്ങൾ</h3>
+            <div id="munshideenContainer">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input list="nameList" placeholder="പേര്">
+                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                </div>
+            </div>
+            <button type="button" onclick="addDynamicInput('munshideenContainer')"
+                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                Add More</button>
+        </div>
+
+        <div class="section">
+            <h3>ഖസീദ മജ്ലിസ്</h3>
+            <label>നേതൃത്വം</label>
+            <div id="qaseedaMajlisContainer">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input list="nameList" placeholder="പേര്">
+                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                </div>
+            </div>
+            <button type="button" onclick="addDynamicInput('qaseedaMajlisContainer')"
+                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                Add More</button>
+        </div>
+
+        <div class="section">
+            <h3>നമസ്‌കാരം</h3>
+
+            <label>ഇഷാ ഇമാം</label>
+            <input list="nameList" id="isha">
+
+            <label>തറാവീഹ് ഇമാമ്മാർ</label>
+            <div id="tarawihContainer">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input list="nameList" placeholder="പേര്">
+                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                </div>
+            </div>
+            <button type="button" onclick="addDynamicInput('tarawihContainer')"
+                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                Add More</button>
+        </div>
+
+        <div class="section hide-on-schedule">
+            <h3>പങ്കെടുത്ത മജ്ലിസുൽ ഉമന അംഗങ്ങൾ</h3>
+            <textarea id="umana" placeholder="ഓരോ പേരും ഓരോ വരിയിൽ"></textarea>
+        </div>
+
+        <div class="section hide-on-schedule">
+            <h3>നഫഹ</h3>
+            <div id="nafahContainer">
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input list="nameList" placeholder="പേര്">
+                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                </div>
+            </div>
+            <button type="button" onclick="addDynamicInput('nafahContainer')"
+                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                Add More</button>
+        </div>
+
+        <div class="section hide-on-schedule">
+            <h3>പുതിയ ബൈഅത്ത്</h3>
+
+            <h4>റിജാൽ</h4>
+            <div id="bayahContainer">
+                <div class="bayah-entry"
+                    style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+                    <label>പേര്</label>
+                    <input class="bayahName">
+
+                    <label>മുർഷിദ്</label>
+                    <input list="nameList" class="bayahMurshid">
+                </div>
+            </div>
+            <button type="button" onclick="addBayahEntry('bayahContainer')"
+                style="padding: 5px 10px; font-size: 14px; margin-top: 5px;">+ Add More (റിജാൽ)</button>
+
+            <h4 style="margin-top:20px;">സയ്യിദാത്ത്</h4>
+            <div id="bayahSContainer">
+                <div class="bayah-entry"
+                    style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+                    <label>സയ്യിദാത്ത് പേര് </label>
+                    <input class="bayahSName">
+
+                    <label>സയ്യിദാത്ത് മുർഷിദ് </label>
+                    <input list="nameList" class="bayahSMurshid">
+                </div>
+            </div>
+            <button type="button" onclick="addBayahEntry('bayahSContainer', true)"
+                style="padding: 5px 10px; font-size: 14px; margin-top: 5px;">+ Add More (സയ്യിദാത്ത്)</button>
+
+            <!-- Send Bay'ah to Google Sheets -->
+            <div id="bayahSheetsDiv"
+                style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color); text-align: center;">
+                <button id="sheetsBayahBtn" onclick="sendBayahToSheets()"
+                    style="background-color: #0f9d58; color: white; padding: 11px 26px; font-size: 14px;">
+                    📊 Send Bay'ah to Google Sheets
+                </button>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; margin-bottom: 0;">
+                    Appends new entries to the existing list in the sheet
+                </p>
+            </div>
+        </div>
+
+        <div class="section hide-on-schedule">
+            <h3>പങ്കെടുത്തവർ</h3>
+
+            <label>പുരുഷന്മാർ</label>
+            <input type="number" id="men">
+
+            <label>സയ്യിദാത്ത്</label>
+            <input type="number" id="sayyidath">
+
+            <label>കുട്ടികൾ</label>
+            <input type="number" id="children">
+        </div>
+
+        <div class="section hide-on-schedule">
+            <h3>റിപ്പോർട്ട്</h3>
+
+            <label>Report prepared by</label>
+            <input list="nameList" id="preparedBy">
+
+            <label>Report verified by</label>
+            <input list="nameList" id="verifiedBy">
+        </div>
+
+        <div class="btn-group">
+            <button onclick="generate()">Generate Program</button>
+            <button onclick="shareWhatsApp()" style="background-color: #25d366; color: white;">Send to
+                WhatsApp</button>
+            <button id="docsBtn" class="hide-on-schedule" onclick="sendToDocs()"
+                style="background-color: #4285f4; color: white;">Send to Google Docs</button>
+        </div>
+
+        <div id="sortableOutput">
+            <p class="sort-hint">☰ Drag sections to reorder before sharing</p>
+            <div id="sectionCards"></div>
+        </div>
+
+        <div class="history-overlay" id="historyOverlay" onclick="toggleHistory()"></div>
+        <div class="history-panel" id="historyPanel">
+            <div class="history-header">
+                <h3>History</h3>
+                <button class="close-history" onclick="toggleHistory()">&times;</button>
+            </div>
+            <div id="historyList">
+                <!-- History items will be populated here -->
+            </div>
+            <button onclick="clearHistory()"
+                style="width: 100%; margin-top: 20px; background-color: #fce8e8; color: #d32f2f; box-shadow: none;">Clear
+                All History</button>
+        </div>
+
+        <div class="history-btn" onclick="toggleHistory()" title="View History">
+            &#128196;
+        </div>
+    </div> <!-- End container -->
+
+    <script>
+        document.getElementById("date").valueAsDate = new Date();
+
+        // History Management Functions
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            const overlay = document.getElementById('historyOverlay');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) {
+                overlay.classList.add('show');
+                renderHistory();
+            } else {
+                overlay.classList.remove('show');
+            }
+        }
+
+        function saveToHistory(reportText) {
+            const dateStr = document.getElementById("date").value;
+            const mode = document.querySelector('input[name="modeType"]:checked').value;
+            const loc = document.getElementById("location").value;
+            const title = mode === 'schedule' ? `Schedule: ${dateStr} (${loc})` : `Report: ${dateStr} (${loc})`;
+
+            // Gather all input states to rebuild the form later
+            const formState = {
+                modeType: mode,
+                hadraType: document.querySelector('input[name="hadraType"]:checked').value,
+                inputs: {}
+            };
+
+            document.querySelectorAll('input:not([type="radio"]), textarea').forEach(el => {
+                if (el.id) {
+                    formState.inputs[el.id] = el.value;
+                }
+            });
+
+            // Gather dynamic lists
+            ['bust1ListContainer', 'bust2ListContainer', 'munshideenContainer', 'qaseedaMajlisContainer', 'tarawihContainer', 'nafahContainer'].forEach(id => {
+                const container = document.getElementById(id);
+                if (container) {
+                    formState[id] = Array.from(container.querySelectorAll('input')).map(input => input.value);
+                }
+            });
+
+            // Gather Bayah entries
+            const extractBayah = (containerId, nameClass, murshidClass) => {
+                const container = document.getElementById(containerId);
+                if (!container) return [];
+                return Array.from(container.querySelectorAll('.bayah-entry')).map(entry => ({
+                    name: entry.querySelector(`.${nameClass}`).value,
+                    murshid: entry.querySelector(`.${murshidClass}`).value
+                }));
+            };
+
+            formState.bayahMen = extractBayah('bayahContainer', 'bayahName', 'bayahMurshid');
+            formState.bayahSayyidath = extractBayah('bayahSContainer', 'bayahSName', 'bayahSMurshid');
+
+            let history = JSON.parse(localStorage.getItem('qitha_history') || '[]');
+
+            // Check if there is already an entry for this exact date and mode
+            // We use the same generic title format logic for matching
+            const existingIndex = history.findIndex(h => h.title === title);
+
+            if (existingIndex !== -1) {
+                // Update the existing entry
+                history[existingIndex].timestamp = new Date().toLocaleString();
+                history[existingIndex].formState = formState;
+                history[existingIndex].reportText = reportText;
+
+                // Move updated item to the front of the list
+                const updatedItem = history.splice(existingIndex, 1)[0];
+                history.unshift(updatedItem);
+            } else {
+                // Add new item to front, keep last 50
+                history.unshift({
+                    id: Date.now().toString(),
+                    title: title,
+                    timestamp: new Date().toLocaleString(),
+                    formState: formState,
+                    reportText: reportText
+                });
+                if (history.length > 50) history.pop();
+            }
+
+            localStorage.setItem('qitha_history', JSON.stringify(history));
+
+            // Re-render history if the panel is open while saving
+            const panel = document.getElementById('historyPanel');
+            if (panel && panel.classList.contains('open')) {
+                renderHistory();
+            }
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            const history = JSON.parse(localStorage.getItem('qitha_history') || '[]');
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; margin-top: 20px;">No history saved yet.</p>';
+                return;
+            }
+
+            historyList.innerHTML = history.map(item => `
+                <div class="history-item" onclick="loadHistoryItem('${item.id}')">
+                    <div>
+                        <div class="history-item-title">${item.title}</div>
+                        <div class="history-item-date">${item.timestamp}</div>
+                    </div>
+                    <button class="delete-history-btn" onclick="deleteHistoryItem('${item.id}', event)" title="Delete Report">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteHistoryItem(id, event) {
+            // Stop the click from triggering loadHistoryItem
+            event.stopPropagation();
+
+            if (confirm("Are you sure you want to delete this saved report?")) {
+                let history = JSON.parse(localStorage.getItem('qitha_history') || '[]');
+                history = history.filter(h => h.id !== id);
+                localStorage.setItem('qitha_history', JSON.stringify(history));
+                renderHistory();
+            }
+        }
+
+        function loadHistoryItem(id) {
+            const history = JSON.parse(localStorage.getItem('qitha_history') || '[]');
+            const item = history.find(h => h.id === id);
+
+            if (!item) return;
+
+            // Confirm before overwriting
+            if (!confirm("Load this report? Any unsaved changes in the current form will be lost.")) return;
+
+            const state = item.formState;
+
+            // Restore Modes
+            document.querySelector(`input[name="modeType"][value="${state.modeType}"]`).checked = true;
+            if (state.modeType === 'schedule') {
+                document.body.classList.add('schedule-mode');
+            } else {
+                document.body.classList.remove('schedule-mode');
+            }
+
+            document.querySelector(`input[name="hadraType"][value="${state.hadraType}"]`).checked = true;
+            // Trigger hadra change logic manually
+            const madadSection = document.getElementById('madadSection');
+            if (state.hadraType === 'short') {
+                madadSection.style.display = 'none';
+            } else {
+                madadSection.style.display = 'block';
+            }
+
+            // Restore normal inputs
+            for (const [id, value] of Object.entries(state.inputs)) {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            }
+
+            // Helper to restore dynamic lists
+            const restoreDynamicList = (containerId, values, placeholder) => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                // Keep the first empty input template (the structural HTML requirement requires at least one block sometimes, wait, actually let's just clear and rebuild)
+                container.innerHTML = '';
+
+                if (!values || values.length === 0) {
+                    addDynamicInput(containerId, placeholder);
+                    return;
+                }
+
+                values.forEach(val => {
+                    const div = document.createElement("div");
+                    div.style.cssText = "display: flex; gap: 8px; margin-bottom: 8px;";
+                    div.innerHTML = `
+                        <input list="nameList" placeholder="${placeholder}" value="${val}">
+                        <button type="button" onclick="this.parentElement.remove()">X</button>
+                    `;
+                    container.appendChild(div);
+                });
+            };
+
+            restoreDynamicList('bust1ListContainer', state.bust1ListContainer, "പേര്");
+            restoreDynamicList('bust2ListContainer', state.bust2ListContainer, "പേര്");
+            restoreDynamicList('munshideenContainer', state.munshideenContainer, "പേര്");
+            restoreDynamicList('qaseedaMajlisContainer', state.qaseedaMajlisContainer, "പേര്");
+            restoreDynamicList('tarawihContainer', state.tarawihContainer, "പേര്");
+            restoreDynamicList('nafahContainer', state.nafahContainer, "പേര്");
+
+            // Restore Bayah
+            const restoreBayah = (containerId, entries, isSayyidath) => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = '';
+
+                if (!entries || entries.length === 0) return;
+
+                const nameClass = isSayyidath ? "bayahSName" : "bayahName";
+                const murshidClass = isSayyidath ? "bayahSMurshid" : "bayahMurshid";
+                const nameLabel = isSayyidath ? "സയ്യിദാത്ത് പേര് (ഐച്ഛികം)" : "പേര്";
+                const murshidLabel = isSayyidath ? "സയ്യിദാത്ത് മുർഷിദ് (ഐച്ഛികം)" : "മുർഷിദ്";
+
+                entries.forEach(entry => {
+                    const div = document.createElement("div");
+                    div.className = "bayah-entry";
+                    div.style.cssText = "margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; position: relative;";
+                    div.innerHTML = `
+                        <button type="button" onclick="this.parentElement.remove()" style="position: absolute; right: 10px; top: 10px; background: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer;">X</button>
+                        <label>${nameLabel}</label>
+                        <input class="${nameClass}" value="${entry.name}">
+                        
+                        <label>${murshidLabel}</label>
+                        <input list="nameList" class="${murshidClass}" value="${entry.murshid}">
+                    `;
+                    container.appendChild(div);
+                });
+            };
+
+            restoreBayah('bayahContainer', state.bayahMen, false);
+            restoreBayah('bayahSContainer', state.bayahSayyidath, true);
+
+            // Close panel and regenerate text
+            toggleHistory();
+
+            // Re-render the saved text physically on the screen without re-triggering save
+            window.generatedRawText = item.reportText;
+            let previewHTML = window.generatedRawText.replace(/\*(.*?)\*/g, "<b>$1</b>");
+            document.getElementById("output").innerHTML = previewHTML;
+        }
+
+        function clearHistory() {
+            if (confirm("Are you sure you want to delete all saved reports?")) {
+                localStorage.removeItem('qitha_history');
+                renderHistory();
+            }
+        }
+
+        function v(id) {
+            const el = document.getElementById(id);
+            if (el) return el.value.trim();
+
+            // Fallback for dynamic input list containers
+            const container = document.getElementById(id + "Container");
+            if (container) {
+                return Array.from(container.querySelectorAll("input"))
+                    .map(inp => inp.value.trim())
+                    .filter(Boolean)
+                    .join("\n");
+            }
+            return "";
+        }
+        function csv(id) {
+            return v(id).split(/\n+/).map(s => s.trim()).filter(Boolean).join(", ");
+        }
+
+        function addDynamicInput(containerId, placeholderText = "പേര്") {
+            const container = document.getElementById(containerId);
+            const div = document.createElement("div");
+            div.style.cssText = "display: flex; gap: 8px; margin-bottom: 8px;";
+            div.innerHTML = `
+                <input list="nameList" placeholder="${placeholderText}" onchange="saveDraft()">
+                <button type="button" onclick="this.parentElement.remove(); saveDraft();">X</button>
+            `;
+            container.appendChild(div);
+            saveDraft();
+        }
+
+        function addBayahEntry(containerId, isSayyidath = false) {
+            const container = document.getElementById(containerId);
+            const div = document.createElement("div");
+            div.className = "bayah-entry";
+            div.style.cssText = "margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; position: relative;";
+
+            const nameClass = isSayyidath ? "bayahSName" : "bayahName";
+            const murshidClass = isSayyidath ? "bayahSMurshid" : "bayahMurshid";
+            const nameLabel = isSayyidath ? "സയ്യിദാത്ത് പേര് (ഐച്ഛികം)" : "പേര്";
+            const murshidLabel = isSayyidath ? "സയ്യിദാത്ത് മുർഷിദ് (ഐച്ഛികം)" : "മുർഷിദ്";
+
+            div.innerHTML = `
+                <button type="button" onclick="this.parentElement.remove(); saveDraft();" style="position: absolute; right: 10px; top: 10px; background: #ff4444; color: white; border: none; padding: 5px 10px; cursor: pointer;">X</button>
+                <label>${nameLabel}</label>
+                <input class="${nameClass}" onchange="saveDraft()">
+                
+                <label>${murshidLabel}</label>
+                <input list="nameList" class="${murshidClass}" onchange="saveDraft()">
+            `;
+            container.appendChild(div);
+            saveDraft();
+        }
+
+        // Toggle Madad visibility based on Hadra Type
+        document.querySelectorAll('input[name="hadraType"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const madadSection = document.getElementById('madadSection');
+                if (this.value === 'short') {
+                    madadSection.style.display = 'none';
+                    document.getElementById('madad').value = ''; // clear value
+                } else {
+                    madadSection.style.display = 'block';
+                }
+            });
+        });
+
+        function handleLocationChange() {
+            const loc = document.getElementById("location").value;
+            const isQatar = loc === "ദൗഹതുൽ കിറാം ഖത്തർ";
+
+            // Find all inputs that could have the nameList
+            document.querySelectorAll('input').forEach(input => {
+                const hasListAttr = input.getAttribute('list') === 'nameList';
+                const hasBackupAttr = input.getAttribute('data-list') === 'nameList';
+
+                if (hasListAttr || hasBackupAttr) {
+                    if (isQatar) {
+                        // Remove autocomplete dropdown list connection
+                        if (hasListAttr) {
+                            input.setAttribute('data-list', 'nameList');
+                            input.removeAttribute('list');
+                        }
+                    } else {
+                        // Restore autocomplete connection
+                        if (hasBackupAttr) {
+                            input.setAttribute('list', 'nameList');
+                            input.removeAttribute('data-list');
+                        }
+                    }
+                }
+            });
+
+            // Hide Sheets Bay'ah button for Qatar (data goes to a different system)
+            const bayahSheetsDiv = document.getElementById('bayahSheetsDiv');
+            if (bayahSheetsDiv) bayahSheetsDiv.style.display = isQatar ? 'none' : 'block';
+
+            // Hide Send to Google Docs button for Qatar
+            const docsBtn = document.getElementById('docsBtn');
+            if (docsBtn) docsBtn.style.display = isQatar ? 'none' : '';
+
+            // Calling saveDraft ensures we serialize this new UI state properly if needed
+            saveDraft();
+        }
+
+        // Attach global listeners for Auto-Save
+        document.addEventListener('input', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                saveDraft();
+            }
+        });
+
+        document.addEventListener('change', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                saveDraft();
+            }
+        });
+
+        // Initialize draft on load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDraft();
+            handleLocationChange(); // Make sure location rules apply immediately on load
+        });
+
+        function generate() {
+            const isSchedule = document.querySelector('input[name="modeType"]:checked').value === 'schedule';
+
+            let men = +v("men") || 0, say = +v("sayyidath") || 0, kid = +v("children") || 0;
+            let total = men + say + kid;
+            const sep = '\u{2501}'.repeat(14);
+
+            let rawDate = v("date");
+            let formattedDate = rawDate;
+            if (rawDate) {
+                // Assuming date comes from input type="date" as YYYY-MM-DD
+                let parts = rawDate.split("-");
+                if (parts.length === 3) {
+                    formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                }
+            }
+
+            let o = "";
+            let locationVal = v("location");
+
+            if (isSchedule) {
+                o = `*${formattedDate} ഹള്റ ഷെഡ്യൂൾ*\n*${locationVal}*\n${sep}\n`;
+            } else {
+                o = `*Date : ${rawDate}*\n*${locationVal}*\n${sep}\n`;
+            }
+
+            if (v("maghrib")) o += `*صلاة المغرب*\n*ഇമാം* : ${v("maghrib")}\n${sep}\n`;
+
+            if (v("monthlyDuty")) {
+                let dutyType = v("monthlyDutyType");
+                let dutyText = (!isSchedule && dutyType) ? ` - ${dutyType}` : "";
+                o += `*الواجب الشهري*\n*നേതൃത്വം* : ${v("monthlyDuty")}${dutyText}\n${sep}\n`;
+            }
+
+            if (v("family")) o += `*الواجب العائلى*\n*നേതൃത്വം* : ${v("family")}\n\n`;
+
+            if (!isSchedule && (v("surahName") || v("surahPage") || v("ayah"))) {
+                let surahText = v("surahName") ? `*സൂറത്ത്* : ${v("surahName")}  \n` : "";
+                let pageText = v("surahPage") ? `*പേജ് നമ്പർ* : ${v("surahPage")}  \n` : "";
+                let ayahText = v("ayah") ? `*ആയത് നമ്പർ* : ${v("ayah")}\n\n` : "\n\n";
+
+                o += `*ختم القرآن*\n${surahText}${pageText}${ayahText}`;
+                o += `*ختم القصائد*\n*പേജ് നമ്പർ* : ${v("qPage")}  \n*ബൈത് നമ്പർ* : ${v("baith")}\n${sep}\n`;
+            }
+
+            if (v("dars")) {
+                o += `*ദർസ്*\n${v("dars")}  \n`;
+                if (!isSchedule && v("darsRef")) {
+                    o += `*അവലംബം* : ${v("darsRef")}\n`;
+                }
+                o += `${sep}\n`;
+            }
+
+            if (v("muraqaba")) {
+                o += `*മുറാഖബ*\n*നേതൃത്വം* : ${v("muraqaba")}\n${sep}\n`;
+            }
+
+            if (v("masool") || v("mustafthih")) {
+                let hadraType = document.querySelector('input[name="hadraType"]:checked').value;
+
+                if (hadraType === "full" || hadraType === "short") {
+                    if (hadraType === "short") {
+                        o += `*ഹള്റ(ഷോർട്ട്)*\n\n`;
+                    } else {
+                        o += `*ഹള്റ*\n\n`;
+                    }
+
+                    if (v("masool")) o += `*മസ്ഊലുൽ ഹള്റ* : ${v("masool")}  \n`;
+                    if (v("mustafthih")) o += `*മുസ്തഫ്തിഹ്* : ${v("mustafthih")}  \n\n`;
+                    if (v("madad") && hadraType === "full") o += `*മദദ്* : ${v("madad")}  \n\n`;
+
+                    const b1Array = v("bust1List").split(/\n+/).map(s => s.trim()).filter(Boolean);
+                    if (v("bust1Main") || b1Array.length > 0) {
+                        o += `*തബക് 1*\n*ബുസ്ത് 1* :  \n`;
+                        if (v("bust1Main")) o += `${v("bust1Main")} *(Main)*  \n`;
+                        if (b1Array.length > 0) {
+                            o += b1Array.join(", ") + "  \n";
+                        }
+                    }
+
+                    if (v("q1")) o += `*ഖസീദ 1* : ${v("q1")}  \n`;
+                    if (v("q2")) o += `*ഖസീദ 2* : ${v("q2")}  \n\n`;
+
+                    if (v("fardani")) o += `*ഫർദാനി 1* : ${v("fardani")}  \n\n`;
+
+                    const b2Array = v("bust2List").split(/\n+/).map(s => s.trim()).filter(Boolean);
+                    if (v("bust2Main") || b2Array.length > 0) {
+                        o += `*തബക് 2*\n*ബുസ്ത് 2* :  \n`;
+                        if (v("bust2Main")) o += `${v("bust2Main")} *(Main)*  \n`;
+                        if (b2Array.length > 0) {
+                            o += b2Array.join(", ") + "  \n";
+                        }
+                    }
+
+                    if (v("q3")) o += `*ഖസീദ 3* : ${v("q3")}  \n`;
+                    if (v("q4")) o += `*ഖസീദ 4* : ${v("q4")}  \n\n`;
+
+                    if (v("dua")) o += `*Fawatih 2 & Dua* : ${v("dua")}\n\n`;
+                }
+            }
+
+            const munshideenCSV = csv("munshideen");
+            if (munshideenCSV) {
+                o += `*മുൻഷിദീങ്ങൾ*\n${munshideenCSV}\n${sep}\n`;
+            }
+
+            const qmCSV = csv("qaseedaMajlis");
+            if (qmCSV) {
+                o += `*ഖസീദ മജ്ലിസ്*\n*നേതൃത്വം* : ${qmCSV}\n${sep}\n`;
+            }
+
+            if (v("isha")) o += `*الصلاة العشاء*\n*ഇമാം* : ${v("isha")}\n${sep}\n`;
+
+            let tarawihStr = v("tarawih");
+            let tList = tarawihStr ? tarawihStr.split(/\n+/).map(s => s.trim()).filter(Boolean) : [];
+            if (tList.length > 0) {
+                o += `*الصلاة تراويح*\n*ഇമാംമാർ* :  \n`;
+                tList.forEach(name => o += `${name}  \n`);
+                o += `${sep}\n`;
+            }
+
+            const umanaCSV = csv("umana");
+            if (!isSchedule && umanaCSV) {
+                o += `*പങ്കെടുത്ത മജ്ലിസുൽ ഉമന അംഗങ്ങൾ*\n${umanaCSV}\n${sep}\n`;
+            }
+
+            if (!isSchedule && v("nafah")) {
+                o += `*നഫഹ*\n${v("nafah")}\n${sep}\n`;
+            }
+
+
+            if (!isSchedule) {
+                // Process Puthiya Bay'ah (Men)
+                let bayahMenEntries = [];
+                document.querySelectorAll("#bayahContainer .bayah-entry").forEach(entry => {
+                    let name = entry.querySelector(".bayahName").value.trim();
+                    let murshid = entry.querySelector(".bayahMurshid").value.trim();
+                    if (name) bayahMenEntries.push({ name, murshid });
+                });
+
+                // Process Puthiya Bay'ah (Sayyidath)
+                let bayahSayyidathEntries = [];
+                document.querySelectorAll("#bayahSContainer .bayah-entry").forEach(entry => {
+                    let sName = entry.querySelector(".bayahSName").value.trim();
+                    let sMurshid = entry.querySelector(".bayahSMurshid").value.trim();
+                    if (sName) bayahSayyidathEntries.push({ name: sName, murshid: sMurshid });
+                });
+
+                if (bayahMenEntries.length > 0 || bayahSayyidathEntries.length > 0) {
+                    o += `*പുതിയ ബൈഅത്ത്*\n\n`;
+
+                    if (bayahMenEntries.length > 0) {
+                        o += `*റിജാൽ*\n`;
+                        bayahMenEntries.forEach(entry => {
+                            o += `⁠● പേര് : ${entry.name}  \n മുർഷിദ് : ${entry.murshid}  \n\n`;
+                        });
+                    }
+
+                    if (bayahSayyidathEntries.length > 0) {
+                        o += `*സയ്യിദാത്ത്*\n`;
+                        bayahSayyidathEntries.forEach(entry => {
+                            o += `⁠● പേര് : ${entry.name}  \n മുർഷിദ് : ${entry.murshid}  \n\n`;
+                        });
+                    }
+
+                    o += `${sep}\n`;
+                }
+            }
+
+            if (!isSchedule && (men || say || kid)) {
+                o += `*പങ്കെടുത്തവർ*\n   പുരുഷന്മാർ : ${men}  \n   സയ്യിദാത്ത് : ${say}  \n   കുട്ടികൾ : ${kid}  \n   *ആകെ* : *${total}*\n${sep}\n`;
+            }
+
+            if (!isSchedule && v("preparedBy")) o += `*Report prepared by* : ${v("preparedBy")}  \n`;
+            if (!isSchedule && v("verifiedBy")) o += `*Report verified by* : ${v("verifiedBy")}\n`;
+
+            // If we are in schedule mode, maybe strip excessive empty lines to clean the output up
+            if (isSchedule) {
+                o = o.replace(/\n{3,}/g, '\n\n');
+            }
+
+            // Save the raw text (with asterisks)
+            window.generatedRawText = o.trim();
+
+            // Save to LocalStorage History
+            saveToHistory(window.generatedRawText);
+
+            // Parse and render as draggable section cards
+            renderSectionCards(window.generatedRawText);
+
+            // Handle Docs Button Visibility (Only show for Kanhangad in Report mode)
+            const docsBtn = document.getElementById("docsBtn");
+            if (locationVal === "ദാറുൽ കിറാം കാഞ്ഞങ്ങാട്" && !isSchedule) {
+                docsBtn.style.display = "inline-flex";
+            } else {
+                docsBtn.style.display = "none";
+            }
+        }
+
+        // ── Section Card Drag-and-Drop ──────────────────────────────────
+        const SEP = '\u2501'.repeat(14);
+
+        function renderSectionCards(rawText) {
+            const container = document.getElementById('sectionCards');
+            const wrapper = document.getElementById('sortableOutput');
+            container.innerHTML = '';
+            wrapper.style.display = 'block';
+
+            // Split by separator line; each chunk is one section (without trailing sep)
+            const parts = rawText.split('\n' + SEP + '\n');
+
+            // The last part may be an empty string or the footer (prepared/verified by) – keep as-is
+            parts.forEach((part, idx) => {
+                const trimmed = part.trim();
+                if (!trimmed) return;
+
+                const isPinned = idx === 0; // header is always first
+                const card = document.createElement('div');
+                card.className = 'section-card' + (isPinned ? ' pinned' : '');
+                card.setAttribute('draggable', 'false'); // enabled only via handle press
+                card.dataset.raw = part; // store raw text for reconstruction
+
+                // Drag handle
+                const handle = document.createElement('span');
+                handle.className = 'drag-handle';
+                handle.textContent = '⠿';
+                handle.title = isPinned ? 'Header (fixed)' : 'Drag to reorder';
+
+                // Body
+                const body = document.createElement('div');
+                body.className = 'section-card-body';
+                body.innerHTML = trimmed.replace(/\*(.*?)\*/g, '<b>$1</b>');
+
+                card.appendChild(handle);
+                card.appendChild(body);
+                container.appendChild(card);
+
+                if (!isPinned) {
+                    setupDrag(card);
+                }
+            });
+        }
+
+        // Reconstruct the final raw text from current card order
+        function getTextFromCards() {
+            const cards = document.querySelectorAll('#sectionCards .section-card');
+            if (!cards.length) return window.generatedRawText || '';
+            const parts = [];
+            cards.forEach(card => {
+                const raw = card.dataset.raw;
+                if (raw && raw.trim()) parts.push(raw.trim());
+            });
+            return parts.join('\n' + SEP + '\n');
+        }
+
+        // ── Drag-and-Drop logic (mouse + touch) ──
+        let dragSrc = null;
+
+        function setupDrag(card) {
+            const handle = card.querySelector('.drag-handle');
+
+            // Mouse: enable drag ONLY when the handle is pressed
+            handle.addEventListener('mousedown', () => {
+                card.setAttribute('draggable', 'true');
+            });
+            // Reset draggable after drag ends (or if mouse released without dragging)
+            document.addEventListener('mouseup', () => {
+                card.setAttribute('draggable', 'false');
+            });
+
+            card.addEventListener('dragstart', (e) => {
+                dragSrc = card;
+                card.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            card.addEventListener('dragend', () => {
+                dragSrc = null;
+                card.classList.remove('dragging');
+                card.setAttribute('draggable', 'false');
+                document.querySelectorAll('.section-card').forEach(c => c.classList.remove('drag-over'));
+            });
+            card.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                if (dragSrc && dragSrc !== card && !card.classList.contains('pinned')) {
+                    document.querySelectorAll('.section-card').forEach(c => c.classList.remove('drag-over'));
+                    card.classList.add('drag-over');
+                }
+            });
+            card.addEventListener('dragleave', () => {
+                card.classList.remove('drag-over');
+            });
+            card.addEventListener('drop', (e) => {
+                e.preventDefault();
+                card.classList.remove('drag-over');
+                if (dragSrc && dragSrc !== card && !card.classList.contains('pinned')) {
+                    const container = document.getElementById('sectionCards');
+                    const cards = [...container.querySelectorAll('.section-card')];
+                    const srcIdx = cards.indexOf(dragSrc);
+                    const tgtIdx = cards.indexOf(card);
+                    if (tgtIdx === 0) return;
+                    if (srcIdx < tgtIdx) {
+                        container.insertBefore(dragSrc, card.nextSibling);
+                    } else {
+                        container.insertBefore(dragSrc, card);
+                    }
+                }
+            });
+
+            // Touch: listeners ONLY on the handle — card body stays free for scrolling
+            let touchCard = null;
+            handle.addEventListener('touchstart', (e) => {
+                touchCard = card;
+                card.classList.add('dragging');
+            }, { passive: true });
+            handle.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // prevent scroll only when dragging via handle
+                const touch = e.touches[0];
+                const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                const target = el ? el.closest('.section-card') : null;
+                document.querySelectorAll('.section-card').forEach(c => c.classList.remove('drag-over'));
+                if (target && target !== touchCard && !target.classList.contains('pinned')) {
+                    target.classList.add('drag-over');
+                }
+            }, { passive: false });
+            handle.addEventListener('touchend', (e) => {
+                card.classList.remove('dragging');
+                const touch = e.changedTouches[0];
+                const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                const target = el ? el.closest('.section-card') : null;
+                document.querySelectorAll('.section-card').forEach(c => c.classList.remove('drag-over'));
+                if (target && target !== touchCard && !target.classList.contains('pinned')) {
+                    const container = document.getElementById('sectionCards');
+                    const cards = [...container.querySelectorAll('.section-card')];
+                    const srcIdx = cards.indexOf(touchCard);
+                    const tgtIdx = cards.indexOf(target);
+                    if (tgtIdx === 0) return;
+                    if (srcIdx < tgtIdx) {
+                        container.insertBefore(touchCard, target.nextSibling);
+                    } else {
+                        container.insertBefore(touchCard, target);
+                    }
+                }
+                touchCard = null;
+            });
+        }
+
+        // ── Bay'ah → Google Sheets ─────────────────────────────────────
+        // ⚠️  Replace this URL with your deployed Apps Script Web App URL
+        const BAYAH_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxhbtAtLioR_JgzG6hz1VYhRh0DFHJFWgxF9i_B_udGpgSvFUb0h6IWS7Pqat9-tR5X/exec';
+
+        async function sendBayahToSheets() {
+            const date = v('date');
+            const location = v('location');
+            const entries = [];
+
+            // Collect Rijal
+            document.querySelectorAll('#bayahContainer .bayah-entry').forEach(entry => {
+                const name = entry.querySelector('.bayahName').value.trim();
+                const murshid = entry.querySelector('.bayahMurshid').value.trim();
+                if (name) entries.push({ date, location, type: 'റിജാൽ', name, murshid });
+            });
+
+            // Collect Sayyidath
+            document.querySelectorAll('#bayahSContainer .bayah-entry').forEach(entry => {
+                const name = entry.querySelector('.bayahSName').value.trim();
+                const murshid = entry.querySelector('.bayahSMurshid').value.trim();
+                if (name) entries.push({ date, location, type: 'സയ്യിദാത്ത്', name, murshid });
+            });
+
+            if (entries.length === 0) {
+                alert('No Bay\'ah entries found. Please fill in at least one name.');
+                return;
+            }
+
+            if (BAYAH_SHEETS_URL === 'YOUR_BAYAH_SHEETS_APPS_SCRIPT_URL_HERE') {
+                alert('⚠️ Please set up the Google Apps Script first and update BAYAH_SHEETS_URL in the code.');
+                return;
+            }
+
+            const btn = document.getElementById('sheetsBayahBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Sending…';
+            btn.disabled = true;
+
+            try {
+                await fetch(BAYAH_SHEETS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'entries=' + encodeURIComponent(JSON.stringify(entries))
+                });
+                alert(`✅ ${entries.length} Bay'ah entry/entries sent to Google Sheets!`);
+            } catch (err) {
+                alert('Error sending to Sheets: ' + err.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        function shareWhatsApp() {
+            const text = getTextFromCards();
+            if (!text) { alert('Please generate the program first'); return; }
+            window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+        }
+
+        async function sendToDocs() {
+            const text = getTextFromCards();
+            if (!text) {
+                alert('Please generate the program first');
+                return;
+            }
+
+            // Remove WhatsApp bold markers for plain text in Google Docs
+            let t = text.replace(/\*/g, '');
+
+            const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwqadY-LIsI7PhWxN6JleXwPcWGiLApeM5LFCgseKPmUBODd4jxfw2GkPW1mDx_-b-6tg/exec';
+            const btn = document.querySelector('button[onclick="sendToDocs()"]');
+            const originalText = btn.textContent;
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'text=' + encodeURIComponent(t)
+                });
+                alert('Successfully sent to Google Docs!');
+            } catch (err) {
+                alert('Error sending to Docs: ' + err.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
+
+
+</body>
+
+</html>

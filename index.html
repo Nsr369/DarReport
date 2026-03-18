@@ -2088,26 +2088,38 @@
         // Helper to remove duplicates from array of entries
         function deDuplicateFinance(data) {
             if (!data) return { contributions: [], expenses: [] };
+            
             const seenIds = new Set();
+            const seenFingerprints = new Set();
             
-            if (data.contributions) {
-                data.contributions = data.contributions.filter(c => {
-                    if (!c.id) c.id = uid(); // Ensure ID exists
-                    if (seenIds.has(c.id)) return false;
-                    seenIds.add(c.id);
+            const process = (arr, isExpense) => {
+                if (!arr) return [];
+                return arr.filter(item => {
+                    // 1. Check ID-based duplicates (for app-generated entries)
+                    if (item.id) {
+                        if (seenIds.has(item.id)) return false;
+                        seenIds.add(item.id);
+                    }
+                    
+                    // 2. Check Content-based duplicates (for Sheet-edited entries)
+                    // We combine Date, Name/Particulars, and Amount into a unique string
+                    const name = (isExpense ? item.particulars : item.name) || "";
+                    const fingerprint = `${item.date}|${name.trim()}|${item.amount}`;
+                    
+                    if (seenFingerprints.has(fingerprint)) {
+                        console.warn("De-duplicating entry:", fingerprint);
+                        return false;
+                    }
+                    seenFingerprints.add(fingerprint);
+                    
+                    // Assign ID if missing
+                    if (!item.id) item.id = uid();
                     return true;
                 });
-            }
+            };
             
-            if (data.expenses) {
-                const seenExpIds = new Set();
-                data.expenses = data.expenses.filter(e => {
-                    if (!e.id) e.id = uid();
-                    if (seenExpIds.has(e.id)) return false;
-                    seenExpIds.add(e.id);
-                    return true;
-                });
-            }
+            data.contributions = process(data.contributions, false);
+            data.expenses = process(data.expenses, true);
             return data;
         }
         function saveFinance(data) {

@@ -18,27 +18,25 @@
 
     <style>
         :root {
-            /* Soft Islamic Minimal Palette */
-            --primary: #355e3b;
-            /* Sage/Forest Green */
-            --primary-light: #e8f4ec;
-            /* Soft Mint Hover */
-            --primary-dark: #2a4b2f;
-            --bg-color: #faf8f5;
-            /* Warm Cream */
+            /* Premium Islamic Minimal Palette */
+            --primary: #1e3a1a; /* Deep Forest Green */
+            --primary-light: #e8f4ec; /* Soft Sage */
+            --primary-dark: #142a12;
+            --accent: #d4af37; /* Gold Accent */
+            --bg-color: #f7f9f7;
             --surface-color: #ffffff;
-            --text-primary: #2d3748;
-            /* Dark Charcoal (softer than black) */
+            --text-primary: #1a202c;
             --text-secondary: #4a5568;
             --border-color: #e2e8f0;
-            --shadow-1: 0 4px 12px rgba(46, 92, 70, 0.04);
-            /* Soft, diffused shadow */
-            --shadow-2: 0 8px 24px rgba(46, 92, 70, 0.08);
-            /* Elevated hover shadow */
-            --radius-md: 16px;
-            /* Increased for softer card corners */
-            --radius-sm: 8px;
-            /* Modern input corners */
+            --shadow-1: 0 4px 20px rgba(0, 0, 0, 0.04);
+            --shadow-2: 0 10px 30px rgba(30, 58, 26, 0.1);
+            --radius-md: 20px;
+            --radius-sm: 12px;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-blur: blur(12px);
         }
 
         * {
@@ -574,74 +572,96 @@
             color: var(--text-primary);
             outline: none;
         }
-
         .summary-bar {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
         }
-
+        
         .summary-card {
             flex: 1;
-            min-width: 90px;
-            background: var(--surface-color);
-            border-radius: var(--radius-sm);
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
+            min-width: 100px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: var(--radius-md);
+            padding: 20px 16px;
+            border: 1px solid var(--glass-border);
             text-align: center;
+            box-shadow: var(--shadow-1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+
+        .summary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-2);
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: var(--primary);
+            opacity: 0.8;
+        }
+
+        .summary-card.income::before { background: linear-gradient(90deg, #0f9d58, #34a853); }
+        .summary-card.expense::before { background: linear-gradient(90deg, #d32f2f, #ea4335); }
+        .summary-card.balance::before { background: linear-gradient(90deg, var(--primary), var(--accent)); }
 
         .summary-card .s-label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .summary-card .s-value {
-            font-size: 20px;
+            letter-spacing: 1px;
             font-weight: 700;
         }
 
-        .summary-card.income .s-value {
-            color: #0f9d58;
+        .summary-card .s-value {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
-
-        .summary-card.expense .s-value {
-            color: #d32f2f;
-        }
-
-        .summary-card.balance .s-value {
-            color: var(--primary);
-        }
-
         .fin-entry {
             display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            background: #fcfbf9;
-            border: 1px solid var(--border-color);
+            align-items: center;
+            gap: 12px;
+            background: var(--surface-color);
+            border: 1px solid rgba(0,0,0,0.03);
             border-radius: var(--radius-sm);
-            padding: 10px 12px;
-            margin-bottom: 8px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+
+        .fin-entry:hover {
+            transform: translateX(4px);
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(30, 58, 26, 0.05);
         }
 
         .fin-entry-info {
             flex: 1;
-            font-size: 14px;
         }
 
         .fin-entry-info .ei-main {
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-primary);
+            font-size: 15px;
         }
 
         .fin-entry-info .ei-sub {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-top: 2px;
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            opacity: 0.7;
         }
 
         .fin-entry-amt {
@@ -2240,14 +2260,14 @@
             mcList.innerHTML = mcFiltered.length === 0
                 ? '<p style="font-size:13px;color:var(--text-secondary);">No monthly contributors for this month.</p>'
                 : mcFiltered.map(c => `
-                    <div class="fin-entry">
-                        <div class="fin-entry-info">
-                            <div class="ei-main">${c.name}</div>
-                            <div class="ei-sub">Monthly — ${c.date}</div>
-                        </div>
-                        <div class="fin-entry-amt">${fmt(c.amount)}</div>
-                        <button class="fin-del-btn" onclick="deleteContribution('${c.id}')">🗑</button>
-                    </div>`).join('');
+                        <div class="fin-entry">
+                            <div class="fin-entry-info">
+                                <div class="ei-main">${c.name}</div>
+                                <div class="ei-sub">Monthly • ${c.date}</div>
+                            </div>
+                            <div class="fin-entry-amt">${fmt(c.amount)}</div>
+                            <button class="fin-del-btn" onclick="deleteContribution('${c.id}')">✕</button>
+                        </div>`).join('');
 
             // ── One-time contributions for selected month
             const otFiltered = fin.contributions.filter(c => c.type === 'onetime' && isSameMonth(c.date, month, year));
@@ -2255,14 +2275,14 @@
             otList.innerHTML = otFiltered.length === 0
                 ? '<p style="font-size:13px;color:var(--text-secondary);">No one-time contributions this month.</p>'
                 : otFiltered.map(c => `
-                    <div class="fin-entry">
-                        <div class="fin-entry-info">
-                            <div class="ei-main">${c.name}</div>
-                            <div class="ei-sub">${c.date}</div>
-                        </div>
-                        <div class="fin-entry-amt">${fmt(c.amount)}</div>
-                        <button class="fin-del-btn" onclick="deleteContribution('${c.id}')">🗑</button>
-                    </div>`).join('');
+                        <div class="fin-entry">
+                            <div class="fin-entry-info">
+                                <div class="ei-main">${c.name}</div>
+                                <div class="ei-sub">${c.date}</div>
+                            </div>
+                            <div class="fin-entry-amt">${fmt(c.amount)}</div>
+                            <button class="fin-del-btn" onclick="deleteContribution('${c.id}')">✕</button>
+                        </div>`).join('');
 
             // ── Expenses filtered to selected month
             const expFiltered = fin.expenses.filter(e => isSameMonth(e.date, month, year));
@@ -2270,14 +2290,14 @@
             expList.innerHTML = expFiltered.length === 0
                 ? '<p style="font-size:13px;color:var(--text-secondary);">No expenses this month.</p>'
                 : expFiltered.map(e => `
-                    <div class="fin-entry">
-                        <div class="fin-entry-info">
-                            <div class="ei-main">${e.particulars}</div>
-                            <div class="ei-sub">${e.date}</div>
-                        </div>
-                        <div class="fin-entry-amt" style="color:#d32f2f;">${fmt(e.amount)}</div>
-                        <button class="fin-del-btn" onclick="deleteExpense('${e.id}')">🗑</button>
-                    </div>`).join('');
+                        <div class="fin-entry">
+                            <div class="fin-entry-info">
+                                <div class="ei-main">${e.particulars}</div>
+                                <div class="ei-sub">${e.date}</div>
+                            </div>
+                            <div class="fin-entry-amt" style="color:#d32f2f;">${fmt(e.amount)}</div>
+                            <button class="fin-del-btn" onclick="deleteExpense('${e.id}')">✕</button>
+                        </div>`).join('');
 
             // ── Summary — all contributions for selected month + expenses
             const allIncomeThisMonth = fin.contributions.filter(c => isSameMonth(c.date, month, year));
@@ -2316,8 +2336,8 @@
                 data: {
                     labels,
                     datasets: [
-                        { label: 'Income', data: incomes, backgroundColor: 'rgba(15,157,88,0.75)', borderRadius: 6 },
-                        { label: 'Expense', data: expenses, backgroundColor: 'rgba(211,47,47,0.65)', borderRadius: 6 }
+                        { label: 'Income', data: incomes, backgroundColor: 'rgba(15,157,88,0.7)', borderRadius: 10, barThickness: 12 },
+                        { label: 'Expense', data: expenses, backgroundColor: 'rgba(211,47,47,0.6)', borderRadius: 10, barThickness: 12 }
                     ]
                 },
                 options: {

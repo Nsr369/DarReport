@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Report</title>
+    <title>Qitha | Report & Finance</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -505,451 +507,777 @@
             display: block;
             opacity: 1;
         }
+
+        /* ── Tab Navigation ── */
+        .app-tabs {
+            display: flex;
+            background: var(--surface-color);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 500;
+            margin: -24px -20px 28px;
+            padding: 0 12px;
+        }
+
+        .app-tab-btn {
+            flex: 1;
+            padding: 14px 8px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            box-shadow: none;
+            transition: color 0.2s, border-color 0.2s;
+            letter-spacing: 0.4px;
+        }
+
+        .app-tab-btn:hover {
+            background: none;
+            box-shadow: none;
+            transform: none;
+            color: var(--primary);
+        }
+
+        .app-tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* ── Expense Tab ── */
+        #expenseTab {
+            display: none;
+        }
+
+        .fin-month-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .fin-month-bar select {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-family: inherit;
+            background: #fcfbf9;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .summary-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .summary-card {
+            flex: 1;
+            min-width: 90px;
+            background: var(--surface-color);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .summary-card .s-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-card .s-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .summary-card.income .s-value {
+            color: #0f9d58;
+        }
+
+        .summary-card.expense .s-value {
+            color: #d32f2f;
+        }
+
+        .summary-card.balance .s-value {
+            color: var(--primary);
+        }
+
+        .fin-entry {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: #fcfbf9;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            margin-bottom: 8px;
+        }
+
+        .fin-entry-info {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .fin-entry-info .ei-main {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .fin-entry-info .ei-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .fin-entry-amt {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--primary);
+            white-space: nowrap;
+            align-self: center;
+        }
+
+        .fin-del-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 4px;
+            box-shadow: none;
+            align-self: center;
+            transition: color 0.15s;
+        }
+
+        .fin-del-btn:hover {
+            color: #d32f2f;
+            background: none;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .fin-add-form {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            align-items: flex-end;
+        }
+
+        .fin-add-form input,
+        .fin-add-form select {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-family: inherit;
+            background: #fcfbf9;
+            outline: none;
+        }
+
+        .fin-add-form input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .fin-add-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(46, 92, 70, 0.15);
+        }
+
+        .fin-add-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .fin-section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 20px 0 10px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 6px;
+        }
+
+        .fin-sync-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            margin-top: 16px;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h2>Report</h2>
+    <!-- App-level Tab Navigation -->
+    <div class="app-tabs">
+        <button class="app-tab-btn active" id="tabReportBtn" onclick="showTab('report')">📋 Report</button>
+        <button class="app-tab-btn" id="tabExpenseBtn" onclick="showTab('expense')">💰 Finance</button>
+    </div>
 
-        <div class="radio-group" style="margin-bottom: 20px; text-align: center;">
-            <label><input type="radio" name="modeType" value="report" checked
-                    onchange="document.body.classList.remove('schedule-mode')"> Report Mode</label>
-            <label><input type="radio" name="modeType" value="schedule"
-                    onchange="document.body.classList.add('schedule-mode')"> Schedule Mode</label>
-        </div>
+    <!-- ══ REPORT TAB ══ -->
+    <div id="reportTab">
+        <div class="container">
+            <h2>Report</h2>
 
-        <label>തീയതി</label>
-        <input type="date" id="date">
-
-
-        <label>സ്ഥലം</label>
-        <select id="location" onchange="handleLocationChange()"
-            style="width: 100%; padding: 12px; margin-bottom: 24px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 15px; font-family: 'Roboto', sans-serif;">
-            <option value="ദാറുൽ കിറാം കാഞ്ഞങ്ങാട്">ദാറുൽ കിറാം കാഞ്ഞങ്ങാട്</option>
-            <option value="ദൗഹതുൽ കിറാം ഖത്തർ">ദൗഹതുൽ കിറാം ഖത്തർ</option>
-        </select>
-
-        <datalist id="nameList">
-            <option value="മുഹ്സിൻ കാഞ്ഞങ്ങാട്">
-            <option value="മുബാറക്ക് കാഞ്ഞങ്ങാട്">
-            <option value="നിസാർ കാഞ്ഞങ്ങാട്">
-            <option value="റിയാസ് കാഞ്ഞങ്ങാട്">
-            <option value="സഫ്‌വാൻ കാഞ്ഞങ്ങാട്">
-            <option value="അൻസൽ കാഞ്ഞങ്ങാട്">
-            <option value="ശാഹിദ് കാഞ്ഞങ്ങാട്">
-            <option value="അഷ്റഫ് കാഞ്ഞങ്ങാട്">
-            <option value="സത്താർ കാഞ്ഞങ്ങാട്">
-            <option value="ഷരീഫ് കാഞ്ഞങ്ങാട്">
-            <option value="സഫ്‌വാൻ കാഞ്ഞങ്ങാട്">
-            <option value="റാഷിദ് ഉദുമ">
-        </datalist>
-
-        <datalist id="dutyOptions">
-            <option value="الحزب السيفي">
-            <option value="الحزب الكبير">
-            <option value="المرتبة الصمدية 313-41">
-            <option value="المرتبة الصمدية 777-70">
-            <option value="المرتبة الصمدية 1117-117">
-            <option
-                value="٣٣/١٠٠ لمولانا الشيخ مختار علي محمد الدسوقي رضي الله عنه و مولانا الشيخ محمد عثمان عبده البرهاني رضي الله عنه">
-        </datalist>
-
-        <datalist id="surahList">
-            <option value="1. Al-Fatihah (الفاتحة)">
-            <option value="2. Al-Baqarah (البقرة)">
-            <option value="3. Ali 'Imran (آل عمران)">
-            <option value="4. An-Nisa (النساء)">
-            <option value="5. Al-Ma'idah (المائدة)">
-            <option value="6. Al-An'am (الأنعام)">
-            <option value="7. Al-A'raf (الأعراف)">
-            <option value="8. Al-Anfal (الأنفال)">
-            <option value="9. At-Tawbah (التوبة)">
-            <option value="10. Yunus (يونس)">
-            <option value="11. Hud (هود)">
-            <option value="12. Yusuf (يوسف)">
-            <option value="13. Ar-Ra'd (الرعد)">
-            <option value="14. Ibrahim (إبراهيم)">
-            <option value="15. Al-Hijr (الحجر)">
-            <option value="16. An-Nahl (النحل)">
-            <option value="17. Al-Isra (الإسراء)">
-            <option value="18. Al-Kahf (الكهف)">
-            <option value="19. Maryam (مريم)">
-            <option value="20. Taha (طه)">
-            <option value="21. Al-Anbiya (الأنبياء)">
-            <option value="22. Al-Hajj (الحج)">
-            <option value="23. Al-Mu'minun (المؤمنون)">
-            <option value="24. An-Nur (النور)">
-            <option value="25. Al-Furqan (الفرقان)">
-            <option value="26. Ash-Shu'ara (الشعراء)">
-            <option value="27. An-Naml (النمل)">
-            <option value="28. Al-Qasas (القصص)">
-            <option value="29. Al-'Ankabut (العنكبوت)">
-            <option value="30. Ar-Rum (الروم)">
-            <option value="31. Luqman (لقمان)">
-            <option value="32. As-Sajdah (السجدة)">
-            <option value="33. Al-Ahzab (الأحزاب)">
-            <option value="34. Saba (سبأ)">
-            <option value="35. Fatir (فاطر)">
-            <option value="36. Ya-Sin (يس)">
-            <option value="37. As-Saffat (الصافات)">
-            <option value="38. Sad (ص)">
-            <option value="39. Az-Zumar (الزمر)">
-            <option value="40. Ghafir (غافر)">
-            <option value="41. Fussilat (فصلت)">
-            <option value="42. Ash-Shura (الشورى)">
-            <option value="43. Az-Zukhruf (الزخرف)">
-            <option value="44. Ad-Dukhan (الدخان)">
-            <option value="45. Al-Jathiyah (الجاثية)">
-            <option value="46. Al-Ahqaf (الأحقاف)">
-            <option value="47. Muhammad (محمد)">
-            <option value="48. Al-Fath (الفتح)">
-            <option value="49. Al-Hujurat (الحجرات)">
-            <option value="50. Qaf (ق)">
-            <option value="51. Adh-Dhariyat (الذاريات)">
-            <option value="52. At-Tur (الطور)">
-            <option value="53. An-Najm (النجم)">
-            <option value="54. Al-Qamar (القمر)">
-            <option value="55. Ar-Rahman (الرحمن)">
-            <option value="56. Al-Waqi'ah (الواقعة)">
-            <option value="57. Al-Hadid (الحديد)">
-            <option value="58. Al-Mujadila (المجادلة)">
-            <option value="59. Al-Hashr (الحشر)">
-            <option value="60. Al-Mumtahanah (الممتحنة)">
-            <option value="61. As-Saff (الصف)">
-            <option value="62. Al-Jumu'ah (الجمعة)">
-            <option value="63. Al-Munafiqun (المنافقون)">
-            <option value="64. At-Taghabun (التغابن)">
-            <option value="65. At-Talaq (الطلاق)">
-            <option value="66. At-Tahrim (التحريم)">
-            <option value="67. Al-Mulk (الملك)">
-            <option value="68. Al-Qalam (القلم)">
-            <option value="69. Al-Haqqah (الحاقة)">
-            <option value="70. Al-Ma'arij (المعارج)">
-            <option value="71. Nuh (نوح)">
-            <option value="72. Al-Jinn (الجن)">
-            <option value="73. Al-Muzzammil (المزمل)">
-            <option value="74. Al-Muddaththir (المدثر)">
-            <option value="75. Al-Qiyamah (القيامة)">
-            <option value="76. Al-Insan (الإنسان)">
-            <option value="77. Al-Mursalat (المرسلات)">
-            <option value="78. An-Naba (النبأ)">
-            <option value="79. An-Nazi'at (النازعات)">
-            <option value="80. 'Abasa (عبس)">
-            <option value="81. At-Takwir (التكوير)">
-            <option value="82. Al-Infitar (الانفطار)">
-            <option value="83. Al-Mutaffifin (المطففين)">
-            <option value="84. Al-Inshiqaq (الانشقاق)">
-            <option value="85. Al-Buruj (البروج)">
-            <option value="86. At-Tariq (الطارق)">
-            <option value="87. Al-A'la (الأعلى)">
-            <option value="88. Al-Ghashiyah (الغاشية)">
-            <option value="89. Al-Fajr (الفجر)">
-            <option value="90. Al-Balad (البلد)">
-            <option value="91. Ash-Shams (الشمس)">
-            <option value="92. Al-Layl (الليل)">
-            <option value="93. Ad-Duha (الضحى)">
-            <option value="94. Ash-Sharh (الشرح)">
-            <option value="95. At-Tin (التين)">
-            <option value="96. Al-'Alaq (العلق)">
-            <option value="97. Al-Qadr (القدر)">
-            <option value="98. Al-Bayyinah (البينة)">
-            <option value="99. Az-Zalzalah (الزلزلة)">
-            <option value="100. Al-'Adiyat (العاديات)">
-            <option value="101. Al-Qari'ah (القارعة)">
-            <option value="102. At-Takathur (التكاثر)">
-            <option value="103. Al-'Asr (العصر)">
-            <option value="104. Al-Humazah (الهمزة)">
-            <option value="105. Al-Fil (الفيل)">
-            <option value="106. Quraysh (قريش)">
-            <option value="107. Al-Ma'un (الماعون)">
-            <option value="108. Al-Kawthar (الكوثر)">
-            <option value="109. Al-Kafirun (الكافرون)">
-            <option value="110. An-Nasr (النصر)">
-            <option value="111. Al-Masad (المسد)">
-            <option value="112. Al-Ikhlas (الإخلاص)">
-            <option value="113. Al-Falaq (الفلق)">
-            <option value="114. An-Nas (الناس)">
-        </datalist>
-
-        <div class="section">
-            <h3>ഇമാം / നേതൃത്വം</h3>
-
-            <label>മഗ്രിബ് ഇമാം</label>
-            <input list="nameList" id="maghrib">
-
-            <label>الواجب الشهري</label>
-            <div style="display: flex; gap: 8px;">
-                <input list="nameList" id="monthlyDuty" placeholder="നേതൃത്വം (പേര്)">
-                <input list="dutyOptions" id="monthlyDutyType" class="hide-on-schedule"
-                    placeholder="ഓപ്ഷൻ തിരഞ്ഞെടുക്കുക">
+            <div class="radio-group" style="margin-bottom: 20px; text-align: center;">
+                <label><input type="radio" name="modeType" value="report" checked
+                        onchange="document.body.classList.remove('schedule-mode')"> Report Mode</label>
+                <label><input type="radio" name="modeType" value="schedule"
+                        onchange="document.body.classList.add('schedule-mode')"> Schedule Mode</label>
             </div>
 
-            <label>الواجب العائلى</label>
-            <input list="nameList" id="family">
-            <div class="hide-on-schedule"
-                style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 24px;">
-                <h3>ഖുർആൻ & ഖസീദ</h3>
+            <label>തീയതി</label>
+            <input type="date" id="date">
 
-                <label>സൂറത്ത്</label>
-                <input list="surahList" id="surahName">
 
-                <label>ഖുർആൻ പേജ് നമ്പർ</label>
-                <input id="surahPage">
+            <label>സ്ഥലം</label>
+            <input type="hidden" id="location" value="ദാറുൽ കിറാം കാഞ്ഞങ്ങാട്">
+            <div
+                style="padding: 13px 16px; margin-bottom: 24px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 15px; background: #fcfbf9; color: var(--text-primary);">
+                ദാറുൽ കിറാം കാഞ്ഞങ്ങാട്</div>
 
-                <label>ആയത്ത് നമ്പർ</label>
-                <input id="ayah">
+            <datalist id="nameList">
+                <option value="മുഹ്സിൻ കാഞ്ഞങ്ങാട്">
+                <option value="മുബാറക്ക് കാഞ്ഞങ്ങാട്">
+                <option value="നിസാർ കാഞ്ഞങ്ങാട്">
+                <option value="റിയാസ് കാഞ്ഞങ്ങാട്">
+                <option value="സഫ്‌വാൻ കാഞ്ഞങ്ങാട്">
+                <option value="അൻസൽ കാഞ്ഞങ്ങാട്">
+                <option value="ശാഹിദ് കാഞ്ഞങ്ങാട്">
+                <option value="അഷ്റഫ് കാഞ്ഞങ്ങാട്">
+                <option value="സത്താർ കാഞ്ഞങ്ങാട്">
+                <option value="ഷരീഫ് കാഞ്ഞങ്ങാട്">
+                <option value="സഫ്‌വാൻ കാഞ്ഞങ്ങാട്">
+                <option value="റാഷിദ് ഉദുമ">
+            </datalist>
 
-                <label>ഖസീദ പേജ് നമ്പർ</label>
-                <input id="qPage">
+            <datalist id="dutyOptions">
+                <option value="الحزب السيفي">
+                <option value="الحزب الكبير">
+                <option value="المرتبة الصمدية 313-41">
+                <option value="المرتبة الصمدية 777-70">
+                <option value="المرتبة الصمدية 1117-117">
+                <option
+                    value="٣٣/١٠٠ لمولانا الشيخ مختار علي محمد الدسوقي رضي الله عنه و مولانا الشيخ محمد عثمان عبده البرهاني رضي الله عنه">
+            </datalist>
 
-                <label>ബൈത് നമ്പർ</label>
-                <input id="baith">
-            </div>
-        </div>
-        <div class="section">
-            <h3>ദർസ്</h3>
-            <label>നടത്തുന്നവർ</label>
-            <input list="nameList" id="dars">
+            <datalist id="surahList">
+                <option value="1. Al-Fatihah (الفاتحة)">
+                <option value="2. Al-Baqarah (البقرة)">
+                <option value="3. Ali 'Imran (آل عمران)">
+                <option value="4. An-Nisa (النساء)">
+                <option value="5. Al-Ma'idah (المائدة)">
+                <option value="6. Al-An'am (الأنعام)">
+                <option value="7. Al-A'raf (الأعراف)">
+                <option value="8. Al-Anfal (الأنفال)">
+                <option value="9. At-Tawbah (التوبة)">
+                <option value="10. Yunus (يونس)">
+                <option value="11. Hud (هود)">
+                <option value="12. Yusuf (يوسف)">
+                <option value="13. Ar-Ra'd (الرعد)">
+                <option value="14. Ibrahim (إبراهيم)">
+                <option value="15. Al-Hijr (الحجر)">
+                <option value="16. An-Nahl (النحل)">
+                <option value="17. Al-Isra (الإسراء)">
+                <option value="18. Al-Kahf (الكهف)">
+                <option value="19. Maryam (مريم)">
+                <option value="20. Taha (طه)">
+                <option value="21. Al-Anbiya (الأنبياء)">
+                <option value="22. Al-Hajj (الحج)">
+                <option value="23. Al-Mu'minun (المؤمنون)">
+                <option value="24. An-Nur (النور)">
+                <option value="25. Al-Furqan (الفرقان)">
+                <option value="26. Ash-Shu'ara (الشعراء)">
+                <option value="27. An-Naml (النمل)">
+                <option value="28. Al-Qasas (القصص)">
+                <option value="29. Al-'Ankabut (العنكبوت)">
+                <option value="30. Ar-Rum (الروم)">
+                <option value="31. Luqman (لقمان)">
+                <option value="32. As-Sajdah (السجدة)">
+                <option value="33. Al-Ahzab (الأحزاب)">
+                <option value="34. Saba (سبأ)">
+                <option value="35. Fatir (فاطر)">
+                <option value="36. Ya-Sin (يس)">
+                <option value="37. As-Saffat (الصافات)">
+                <option value="38. Sad (ص)">
+                <option value="39. Az-Zumar (الزمر)">
+                <option value="40. Ghafir (غافر)">
+                <option value="41. Fussilat (فصلت)">
+                <option value="42. Ash-Shura (الشورى)">
+                <option value="43. Az-Zukhruf (الزخرف)">
+                <option value="44. Ad-Dukhan (الدخان)">
+                <option value="45. Al-Jathiyah (الجاثية)">
+                <option value="46. Al-Ahqaf (الأحقاف)">
+                <option value="47. Muhammad (محمد)">
+                <option value="48. Al-Fath (الفتح)">
+                <option value="49. Al-Hujurat (الحجرات)">
+                <option value="50. Qaf (ق)">
+                <option value="51. Adh-Dhariyat (الذاريات)">
+                <option value="52. At-Tur (الطور)">
+                <option value="53. An-Najm (النجم)">
+                <option value="54. Al-Qamar (القمر)">
+                <option value="55. Ar-Rahman (الرحمن)">
+                <option value="56. Al-Waqi'ah (الواقعة)">
+                <option value="57. Al-Hadid (الحديد)">
+                <option value="58. Al-Mujadila (المجادلة)">
+                <option value="59. Al-Hashr (الحشر)">
+                <option value="60. Al-Mumtahanah (الممتحنة)">
+                <option value="61. As-Saff (الصف)">
+                <option value="62. Al-Jumu'ah (الجمعة)">
+                <option value="63. Al-Munafiqun (المنافقون)">
+                <option value="64. At-Taghabun (التغابن)">
+                <option value="65. At-Talaq (الطلاق)">
+                <option value="66. At-Tahrim (التحريم)">
+                <option value="67. Al-Mulk (الملك)">
+                <option value="68. Al-Qalam (القلم)">
+                <option value="69. Al-Haqqah (الحاقة)">
+                <option value="70. Al-Ma'arij (المعارج)">
+                <option value="71. Nuh (نوح)">
+                <option value="72. Al-Jinn (الجن)">
+                <option value="73. Al-Muzzammil (المزمل)">
+                <option value="74. Al-Muddaththir (المدثر)">
+                <option value="75. Al-Qiyamah (القيامة)">
+                <option value="76. Al-Insan (الإنسان)">
+                <option value="77. Al-Mursalat (المرسلات)">
+                <option value="78. An-Naba (النبأ)">
+                <option value="79. An-Nazi'at (النازعات)">
+                <option value="80. 'Abasa (عبس)">
+                <option value="81. At-Takwir (التكوير)">
+                <option value="82. Al-Infitar (الانفطار)">
+                <option value="83. Al-Mutaffifin (المطففين)">
+                <option value="84. Al-Inshiqaq (الانشقاق)">
+                <option value="85. Al-Buruj (البروج)">
+                <option value="86. At-Tariq (الطارق)">
+                <option value="87. Al-A'la (الأعلى)">
+                <option value="88. Al-Ghashiyah (الغاشية)">
+                <option value="89. Al-Fajr (الفجر)">
+                <option value="90. Al-Balad (البلد)">
+                <option value="91. Ash-Shams (الشمس)">
+                <option value="92. Al-Layl (الليل)">
+                <option value="93. Ad-Duha (الضحى)">
+                <option value="94. Ash-Sharh (الشرح)">
+                <option value="95. At-Tin (التين)">
+                <option value="96. Al-'Alaq (العلق)">
+                <option value="97. Al-Qadr (القدر)">
+                <option value="98. Al-Bayyinah (البينة)">
+                <option value="99. Az-Zalzalah (الزلزلة)">
+                <option value="100. Al-'Adiyat (العاديات)">
+                <option value="101. Al-Qari'ah (القارعة)">
+                <option value="102. At-Takathur (التكاثر)">
+                <option value="103. Al-'Asr (العصر)">
+                <option value="104. Al-Humazah (الهمزة)">
+                <option value="105. Al-Fil (الفيل)">
+                <option value="106. Quraysh (قريش)">
+                <option value="107. Al-Ma'un (الماعون)">
+                <option value="108. Al-Kawthar (الكوثر)">
+                <option value="109. Al-Kafirun (الكافرون)">
+                <option value="110. An-Nasr (النصر)">
+                <option value="111. Al-Masad (المسد)">
+                <option value="112. Al-Ikhlas (الإخلاص)">
+                <option value="113. Al-Falaq (الفلق)">
+                <option value="114. An-Nas (الناس)">
+            </datalist>
 
-            <label> അവലംബം</label>
-            <input id="darsRef">
-        </div>
-        <div class="section">
-            <h3>മുറാഖബ</h3>
+            <div class="section">
+                <h3>ഇമാം / നേതൃത്വം</h3>
 
-            <label>നേതൃത്വം</label>
-            <input list="nameList" id="muraqaba">
-        </div>
+                <label>മഗ്രിബ് ഇമാം</label>
+                <input list="nameList" id="maghrib">
 
-        <div class="section">
-            <h3>ഹള്റ</h3>
+                <label>الواجب الشهري</label>
+                <div style="display: flex; gap: 8px;">
+                    <input list="nameList" id="monthlyDuty" placeholder="നേതൃത്വം (പേര്)">
+                    <input list="dutyOptions" id="monthlyDutyType" class="hide-on-schedule"
+                        placeholder="ഓപ്ഷൻ തിരഞ്ഞെടുക്കുക">
+                </div>
 
-            <div class="radio-group" style="margin-bottom: 15px;">
-                <label><input type="radio" name="hadraType" value="full" checked> Full Hadra</label>
-                <label><input type="radio" name="hadraType" value="short"> Short Hadra</label>
-            </div>
+                <label>الواجب العائلى</label>
+                <input list="nameList" id="family">
+                <div class="hide-on-schedule"
+                    style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 24px;">
+                    <h3>ഖുർആൻ & ഖസീദ</h3>
 
-            <label>മസ്ഊലുൽഹള്റ</label>
-            <input list="nameList" id="masool">
+                    <label>സൂറത്ത്</label>
+                    <input list="surahList" id="surahName">
 
-            <label>മുസ്തഫ്തിഹ്</label>
-            <input list="nameList" id="mustafthih">
+                    <label>ഖുർആൻ പേജ് നമ്പർ</label>
+                    <input id="surahPage">
 
-            <label>ബുസ്ത് 1 (main)</label>
-            <input list="nameList" id="bust1Main">
+                    <label>ആയത്ത് നമ്പർ</label>
+                    <input id="ayah">
 
-            <label>ബുസ്ത് 1 (പങ്കെടുക്കുന്നവർ)</label>
-            <div id="bust1ListContainer">
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <input list="nameList" placeholder="പേര്">
-                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                    <label>ഖസീദ പേജ് നമ്പർ</label>
+                    <input id="qPage">
+
+                    <label>ബൈത് നമ്പർ</label>
+                    <input id="baith">
                 </div>
             </div>
-            <button type="button" onclick="addDynamicInput('bust1ListContainer')"
-                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
-                Add More</button>
+            <div class="section">
+                <h3>ദർസ്</h3>
+                <label>നടത്തുന്നവർ</label>
+                <input list="nameList" id="dars">
 
-            <div id="madadSection">
-                <label>മദദ്</label>
-                <input list="nameList" id="madad">
+                <label> അവലംബം</label>
+                <input id="darsRef">
+            </div>
+            <div class="section">
+                <h3>മുറാഖബ</h3>
+
+                <label>നേതൃത്വം</label>
+                <input list="nameList" id="muraqaba">
             </div>
 
-            <label>ഖസീദ 1</label>
-            <input list="nameList" id="q1">
+            <div class="section">
+                <h3>ഹള്റ</h3>
 
-            <label>ഖസീദ 2</label>
-            <input list="nameList" id="q2">
+                <div class="radio-group" style="margin-bottom: 15px;">
+                    <label><input type="radio" name="hadraType" value="full" checked> Full Hadra</label>
+                    <label><input type="radio" name="hadraType" value="short"> Short Hadra</label>
+                </div>
 
-            <label>ഫർദാനി</label>
-            <input list="nameList" id="fardani">
+                <label>മസ്ഊലുൽഹള്റ</label>
+                <input list="nameList" id="masool">
 
-            <label>ബുസ്ത് 2 (main)</label>
-            <input list="nameList" id="bust2Main">
+                <label>മുസ്തഫ്തിഹ്</label>
+                <input list="nameList" id="mustafthih">
 
-            <label>ബുസ്ത് 2 (പങ്കെടുക്കുന്നവർ)</label>
-            <div id="bust2ListContainer">
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <input list="nameList" placeholder="പേര്">
-                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                <label>ബുസ്ത് 1 (main)</label>
+                <input list="nameList" id="bust1Main">
+
+                <label>ബുസ്ത് 1 (പങ്കെടുക്കുന്നവർ)</label>
+                <div id="bust1ListContainer">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input list="nameList" placeholder="പേര്">
+                        <button type="button" onclick="this.parentElement.remove()">X</button>
+                    </div>
+                </div>
+                <button type="button" onclick="addDynamicInput('bust1ListContainer')"
+                    style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                    Add More</button>
+
+                <div id="madadSection">
+                    <label>മദദ്</label>
+                    <input list="nameList" id="madad">
+                </div>
+
+                <label>ഖസീദ 1</label>
+                <input list="nameList" id="q1">
+
+                <label>ഖസീദ 2</label>
+                <input list="nameList" id="q2">
+
+                <label>ഫർദാനി</label>
+                <input list="nameList" id="fardani">
+
+                <label>ബുസ്ത് 2 (main)</label>
+                <input list="nameList" id="bust2Main">
+
+                <label>ബുസ്ത് 2 (പങ്കെടുക്കുന്നവർ)</label>
+                <div id="bust2ListContainer">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input list="nameList" placeholder="പേര്">
+                        <button type="button" onclick="this.parentElement.remove()">X</button>
+                    </div>
+                </div>
+                <button type="button" onclick="addDynamicInput('bust2ListContainer')"
+                    style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                    Add More</button>
+
+                <label>ഖസീദ 3</label>
+                <input list="nameList" id="q3">
+
+                <label>ഖസീദ 4</label>
+                <input list="nameList" id="q4">
+
+                <label>ഫവാത്തിഹ് & ദുആ</label>
+                <input list="nameList" id="dua">
+            </div>
+
+            <div class="section">
+                <h3>മുൻഷിദീങ്ങൾ</h3>
+                <div id="munshideenContainer">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input list="nameList" placeholder="പേര്">
+                        <button type="button" onclick="this.parentElement.remove()">X</button>
+                    </div>
+                </div>
+                <button type="button" onclick="addDynamicInput('munshideenContainer')"
+                    style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                    Add More</button>
+            </div>
+
+            <div class="section">
+                <h3>ഖസീദ മജ്ലിസ്</h3>
+                <label>നേതൃത്വം</label>
+                <div id="qaseedaMajlisContainer">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input list="nameList" placeholder="പേര്">
+                        <button type="button" onclick="this.parentElement.remove()">X</button>
+                    </div>
+                </div>
+                <button type="button" onclick="addDynamicInput('qaseedaMajlisContainer')"
+                    style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                    Add More</button>
+            </div>
+
+            <div class="section">
+                <h3>നമസ്‌കാരം</h3>
+
+                <label>ഇഷാ ഇമാം</label>
+                <input list="nameList" id="isha">
+
+                <label>തറാവീഹ് ഇമാമ്മാർ</label>
+                <div id="tarawihContainer">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input list="nameList" placeholder="പേര്">
+                        <button type="button" onclick="this.parentElement.remove()">X</button>
+                    </div>
+                </div>
+                <button type="button" onclick="addDynamicInput('tarawihContainer')"
+                    style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                    Add More</button>
+            </div>
+
+            <div class="section hide-on-schedule">
+                <h3>പങ്കെടുത്ത മജ്ലിസുൽ ഉമന അംഗങ്ങൾ</h3>
+                <textarea id="umana" placeholder="ഓരോ പേരും ഓരോ വരിയിൽ"></textarea>
+            </div>
+
+            <div class="section hide-on-schedule">
+                <h3>നഫഹ</h3>
+                <div id="nafahContainer">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input list="nameList" placeholder="പേര്">
+                        <button type="button" onclick="this.parentElement.remove()">X</button>
+                    </div>
+                </div>
+                <button type="button" onclick="addDynamicInput('nafahContainer')"
+                    style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
+                    Add More</button>
+            </div>
+
+            <div class="section hide-on-schedule">
+                <h3>പുതിയ ബൈഅത്ത്</h3>
+
+                <h4>റിജാൽ</h4>
+                <div id="bayahContainer">
+                    <div class="bayah-entry"
+                        style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+                        <label>പേര്</label>
+                        <input class="bayahName">
+
+                        <label>മുർഷിദ്</label>
+                        <input list="nameList" class="bayahMurshid">
+                    </div>
+                </div>
+                <button type="button" onclick="addBayahEntry('bayahContainer')"
+                    style="padding: 5px 10px; font-size: 14px; margin-top: 5px;">+ Add More (റിജാൽ)</button>
+
+                <h4 style="margin-top:20px;">സയ്യിദാത്ത്</h4>
+                <div id="bayahSContainer">
+                    <div class="bayah-entry"
+                        style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+                        <label>സയ്യിദാത്ത് പേര് </label>
+                        <input class="bayahSName">
+
+                        <label>സയ്യിദാത്ത് മുർഷിദ് </label>
+                        <input list="nameList" class="bayahSMurshid">
+                    </div>
+                </div>
+                <button type="button" onclick="addBayahEntry('bayahSContainer', true)"
+                    style="padding: 5px 10px; font-size: 14px; margin-top: 5px;">+ Add More (സയ്യിദാത്ത്)</button>
+
+                <!-- Send Bay'ah to Google Sheets -->
+                <div id="bayahSheetsDiv"
+                    style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color); text-align: center;">
+                    <button id="sheetsBayahBtn" onclick="sendBayahToSheets()"
+                        style="background-color: #0f9d58; color: white; padding: 11px 26px; font-size: 14px;">
+                        📊 Send Bay'ah to Google Sheets
+                    </button>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; margin-bottom: 0;">
+                        Appends new entries to the existing list in the sheet
+                    </p>
                 </div>
             </div>
-            <button type="button" onclick="addDynamicInput('bust2ListContainer')"
-                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
-                Add More</button>
 
-            <label>ഖസീദ 3</label>
-            <input list="nameList" id="q3">
+            <div class="section hide-on-schedule">
+                <h3>പങ്കെടുത്തവർ</h3>
 
-            <label>ഖസീദ 4</label>
-            <input list="nameList" id="q4">
+                <label>പുരുഷന്മാർ</label>
+                <input type="number" id="men">
 
-            <label>ഫവാത്തിഹ് & ദുആ</label>
-            <input list="nameList" id="dua">
-        </div>
+                <label>സയ്യിദാത്ത്</label>
+                <input type="number" id="sayyidath">
 
-        <div class="section">
-            <h3>മുൻഷിദീങ്ങൾ</h3>
-            <div id="munshideenContainer">
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <input list="nameList" placeholder="പേര്">
-                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                <label>കുട്ടികൾ</label>
+                <input type="number" id="children">
+            </div>
+
+            <div class="section hide-on-schedule">
+                <h3>റിപ്പോർട്ട്</h3>
+
+                <label>Report prepared by</label>
+                <input list="nameList" id="preparedBy">
+
+                <label>Report verified by</label>
+                <input list="nameList" id="verifiedBy">
+            </div>
+
+            <div class="btn-group">
+                <button onclick="generate()">Generate Program</button>
+                <button onclick="shareWhatsApp()" style="background-color: #25d366; color: white;">Send to
+                    WhatsApp</button>
+                <button id="docsBtn" class="hide-on-schedule" onclick="sendToDocs()"
+                    style="background-color: #4285f4; color: white;">Send to Google Docs</button>
+            </div>
+
+            <div id="sortableOutput">
+                <p class="sort-hint">☰ Drag sections to reorder before sharing</p>
+                <div id="sectionCards"></div>
+            </div>
+
+            <div class="history-overlay" id="historyOverlay" onclick="toggleHistory()"></div>
+            <div class="history-panel" id="historyPanel">
+                <div class="history-header">
+                    <h3>History</h3>
+                    <button class="close-history" onclick="toggleHistory()">&times;</button>
+                </div>
+                <div id="historyList">
+                    <!-- History items will be populated here -->
+                </div>
+                <button onclick="clearHistory()"
+                    style="width: 100%; margin-top: 20px; background-color: #fce8e8; color: #d32f2f; box-shadow: none;">Clear
+                    All History</button>
+            </div>
+
+            <div class="history-btn" onclick="toggleHistory()" title="View History">
+                &#128196;
+            </div>
+        </div> <!-- End container -->
+    </div> <!-- End reportTab -->
+
+    <!-- ══ FINANCE TAB ══ -->
+    <div id="expenseTab">
+        <div class="container">
+            <h2>💰 Finance</h2>
+
+            <!-- Month/Year picker -->
+            <div class="fin-month-bar">
+                <select id="finMonth" onchange="renderFinance()">
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+                <select id="finYear" onchange="renderFinance()"></select>
+                <span id="finSyncStatus"
+                    style="font-size: 11px; margin-left: auto; color: var(--text-secondary); align-self: center;"></span>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-bar">
+                <div class="summary-card income">
+                    <div class="s-label">Income</div>
+                    <div class="s-value" id="sumIncome">₹0</div>
+                </div>
+                <div class="summary-card expense">
+                    <div class="s-label">Expense</div>
+                    <div class="s-value" id="sumExpense">₹0</div>
+                </div>
+                <div class="summary-card balance">
+                    <div class="s-label">Balance</div>
+                    <div class="s-value" id="sumBalance">₹0</div>
                 </div>
             </div>
-            <button type="button" onclick="addDynamicInput('munshideenContainer')"
-                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
-                Add More</button>
-        </div>
 
-        <div class="section">
-            <h3>ഖസീദ മജ്ലിസ്</h3>
-            <label>നേതൃത്വം</label>
-            <div id="qaseedaMajlisContainer">
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <input list="nameList" placeholder="പേര്">
-                    <button type="button" onclick="this.parentElement.remove()">X</button>
+            <!-- Chart -->
+            <div class="section">
+                <h3>Overview (Last 6 Months)</h3>
+                <div class="chart-container">
+                    <canvas id="finChart"></canvas>
                 </div>
             </div>
-            <button type="button" onclick="addDynamicInput('qaseedaMajlisContainer')"
-                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
-                Add More</button>
-        </div>
 
-        <div class="section">
-            <h3>നമസ്‌കാരം</h3>
+            <!-- ── INCOME ── -->
+            <div class="section">
+                <h3>Rent</h3>
 
-            <label>ഇഷാ ഇമാം</label>
-            <input list="nameList" id="isha">
-
-            <label>തറാവീഹ് ഇമാമ്മാർ</label>
-            <div id="tarawihContainer">
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <input list="nameList" placeholder="പേര്">
-                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                <div class="fin-add-form" style="margin-bottom: 16px;">
+                    <input id="mcName" placeholder="Name" list="nameList">
+                    <input id="mcAmount" type="number" placeholder="Amount (₹)" min="0">
+                    <button class="fin-add-btn" onclick="addMonthlyContributor()">+ Add</button>
                 </div>
-            </div>
-            <button type="button" onclick="addDynamicInput('tarawihContainer')"
-                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
-                Add More</button>
-        </div>
+                <div id="monthlyContributorList"></div>
 
-        <div class="section hide-on-schedule">
-            <h3>പങ്കെടുത്ത മജ്ലിസുൽ ഉമന അംഗങ്ങൾ</h3>
-            <textarea id="umana" placeholder="ഓരോ പേരും ഓരോ വരിയിൽ"></textarea>
-        </div>
-
-        <div class="section hide-on-schedule">
-            <h3>നഫഹ</h3>
-            <div id="nafahContainer">
-                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                    <input list="nameList" placeholder="പേര്">
-                    <button type="button" onclick="this.parentElement.remove()">X</button>
+                <div class="fin-section-title" style="margin-top:24px;">💸 One-time Contributions</div>
+                <div class="fin-add-form" style="margin-bottom: 16px;">
+                    <input id="otName" placeholder="Name" list="nameList">
+                    <input id="otAmount" type="number" placeholder="Amount (₹)" min="0">
+                    <input id="otDate" type="date">
+                    <button class="fin-add-btn" onclick="addOnetimeContribution()">+ Add</button>
                 </div>
+                <div id="onetimeList"></div>
             </div>
-            <button type="button" onclick="addDynamicInput('nafahContainer')"
-                style="padding: 5px 10px; font-size: 14px; margin-bottom: 15px; background: transparent; color: var(--primary); border: 1px solid var(--primary); box-shadow: none;">+
-                Add More</button>
-        </div>
 
-        <div class="section hide-on-schedule">
-            <h3>പുതിയ ബൈഅത്ത്</h3>
-
-            <h4>റിജാൽ</h4>
-            <div id="bayahContainer">
-                <div class="bayah-entry"
-                    style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
-                    <label>പേര്</label>
-                    <input class="bayahName">
-
-                    <label>മുർഷിദ്</label>
-                    <input list="nameList" class="bayahMurshid">
+            <!-- ── EXPENSES ── -->
+            <div class="section">
+                <h3>Expenses</h3>
+                <div class="fin-add-form" style="margin-bottom: 16px;">
+                    <input id="expDate" type="date">
+                    <input id="expParticulars" placeholder="Particulars">
+                    <input id="expAmount" type="number" placeholder="Amount (₹)" min="0">
+                    <button class="fin-add-btn" onclick="addExpense()">+ Add</button>
                 </div>
+                <div id="expenseList"></div>
             </div>
-            <button type="button" onclick="addBayahEntry('bayahContainer')"
-                style="padding: 5px 10px; font-size: 14px; margin-top: 5px;">+ Add More (റിജാൽ)</button>
 
-            <h4 style="margin-top:20px;">സയ്യിദാത്ത്</h4>
-            <div id="bayahSContainer">
-                <div class="bayah-entry"
-                    style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
-                    <label>സയ്യിദാത്ത് പേര് </label>
-                    <input class="bayahSName">
+            <!-- Sheets Sync Status (Optional: add a hidden label if needed, but keeping it clean for now) -->
 
-                    <label>സയ്യിദാത്ത് മുർഷിദ് </label>
-                    <input list="nameList" class="bayahSMurshid">
-                </div>
-            </div>
-            <button type="button" onclick="addBayahEntry('bayahSContainer', true)"
-                style="padding: 5px 10px; font-size: 14px; margin-top: 5px;">+ Add More (സയ്യിദാത്ത്)</button>
-
-            <!-- Send Bay'ah to Google Sheets -->
-            <div id="bayahSheetsDiv"
-                style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color); text-align: center;">
-                <button id="sheetsBayahBtn" onclick="sendBayahToSheets()"
-                    style="background-color: #0f9d58; color: white; padding: 11px 26px; font-size: 14px;">
-                    📊 Send Bay'ah to Google Sheets
-                </button>
-                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; margin-bottom: 0;">
-                    Appends new entries to the existing list in the sheet
-                </p>
-            </div>
         </div>
-
-        <div class="section hide-on-schedule">
-            <h3>പങ്കെടുത്തവർ</h3>
-
-            <label>പുരുഷന്മാർ</label>
-            <input type="number" id="men">
-
-            <label>സയ്യിദാത്ത്</label>
-            <input type="number" id="sayyidath">
-
-            <label>കുട്ടികൾ</label>
-            <input type="number" id="children">
-        </div>
-
-        <div class="section hide-on-schedule">
-            <h3>റിപ്പോർട്ട്</h3>
-
-            <label>Report prepared by</label>
-            <input list="nameList" id="preparedBy">
-
-            <label>Report verified by</label>
-            <input list="nameList" id="verifiedBy">
-        </div>
-
-        <div class="btn-group">
-            <button onclick="generate()">Generate Program</button>
-            <button onclick="shareWhatsApp()" style="background-color: #25d366; color: white;">Send to
-                WhatsApp</button>
-            <button id="docsBtn" class="hide-on-schedule" onclick="sendToDocs()"
-                style="background-color: #4285f4; color: white;">Send to Google Docs</button>
-        </div>
-
-        <div id="sortableOutput">
-            <p class="sort-hint">☰ Drag sections to reorder before sharing</p>
-            <div id="sectionCards"></div>
-        </div>
-
-        <div class="history-overlay" id="historyOverlay" onclick="toggleHistory()"></div>
-        <div class="history-panel" id="historyPanel">
-            <div class="history-header">
-                <h3>History</h3>
-                <button class="close-history" onclick="toggleHistory()">&times;</button>
-            </div>
-            <div id="historyList">
-                <!-- History items will be populated here -->
-            </div>
-            <button onclick="clearHistory()"
-                style="width: 100%; margin-top: 20px; background-color: #fce8e8; color: #d32f2f; box-shadow: none;">Clear
-                All History</button>
-        </div>
-
-        <div class="history-btn" onclick="toggleHistory()" title="View History">
-            &#128196;
-        </div>
-    </div> <!-- End container -->
+    </div> <!-- End expenseTab -->
 
     <script>
         document.getElementById("date").valueAsDate = new Date();
@@ -1255,40 +1583,6 @@
         });
 
         function handleLocationChange() {
-            const loc = document.getElementById("location").value;
-            const isQatar = loc === "ദൗഹതുൽ കിറാം ഖത്തർ";
-
-            // Find all inputs that could have the nameList
-            document.querySelectorAll('input').forEach(input => {
-                const hasListAttr = input.getAttribute('list') === 'nameList';
-                const hasBackupAttr = input.getAttribute('data-list') === 'nameList';
-
-                if (hasListAttr || hasBackupAttr) {
-                    if (isQatar) {
-                        // Remove autocomplete dropdown list connection
-                        if (hasListAttr) {
-                            input.setAttribute('data-list', 'nameList');
-                            input.removeAttribute('list');
-                        }
-                    } else {
-                        // Restore autocomplete connection
-                        if (hasBackupAttr) {
-                            input.setAttribute('list', 'nameList');
-                            input.removeAttribute('data-list');
-                        }
-                    }
-                }
-            });
-
-            // Hide Sheets Bay'ah button for Qatar (data goes to a different system)
-            const bayahSheetsDiv = document.getElementById('bayahSheetsDiv');
-            if (bayahSheetsDiv) bayahSheetsDiv.style.display = isQatar ? 'none' : 'block';
-
-            // Hide Send to Google Docs button for Qatar
-            const docsBtn = document.getElementById('docsBtn');
-            if (docsBtn) docsBtn.style.display = isQatar ? 'none' : '';
-
-            // Calling saveDraft ensures we serialize this new UI state properly if needed
             saveDraft();
         }
 
@@ -1750,8 +2044,326 @@
             }
         }
 
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && (location.protocol === 'http:' || location.protocol === 'https:')) {
             navigator.serviceWorker.register('service-worker.js');
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // TAB SWITCHING
+        // ══════════════════════════════════════════════════════════════
+        function showTab(tab) {
+            const isExpense = tab === 'expense';
+            document.getElementById('reportTab').style.display = isExpense ? 'none' : 'block';
+            document.getElementById('expenseTab').style.display = isExpense ? 'block' : 'none';
+            document.getElementById('tabReportBtn').classList.toggle('active', !isExpense);
+            document.getElementById('tabExpenseBtn').classList.toggle('active', isExpense);
+            if (isExpense) renderFinance();
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // FINANCE DATA MODEL  (localStorage key: qitha_finance)
+        // ══════════════════════════════════════════════════════════════
+        const FINANCE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyIAKS-pycTeq3Dp8KfH9JW49J7zFEq-rNPgF26Sm9r_k3N_JivKUYmDq5YhMDnA1tn/exec';
+        let isFinanceLoaded = false; // Flag to prevent saving before initial load
+
+        function getFinance() {
+            const raw = localStorage.getItem('qitha_finance');
+            const data = JSON.parse(raw || '{"contributions":[],"expenses":[]}');
+            // Migrate old format (monthlyContributors + onetimeContributions)
+            if (!data.contributions) {
+                data.contributions = [];
+                // Old one-time contributions keep their date
+                if (data.onetimeContributions) {
+                    data.onetimeContributions.forEach(c =>
+                        data.contributions.push({ id: uid(), date: c.date || '', name: c.name, amount: c.amount, type: 'onetime' }));
+                }
+                // Old monthly contributors have no date — we can't reliably map them, skip
+                delete data.monthlyContributors;
+                delete data.onetimeContributions;
+                saveFinance(data);
+            }
+            return data;
+        }
+
+        // Helper to remove duplicates from array of entries
+        function deDuplicateFinance(data) {
+            if (!data) return { contributions: [], expenses: [] };
+            const seenIds = new Set();
+            
+            if (data.contributions) {
+                data.contributions = data.contributions.filter(c => {
+                    if (!c.id) c.id = uid(); // Ensure ID exists
+                    if (seenIds.has(c.id)) return false;
+                    seenIds.add(c.id);
+                    return true;
+                });
+            }
+            
+            if (data.expenses) {
+                const seenExpIds = new Set();
+                data.expenses = data.expenses.filter(e => {
+                    if (!e.id) e.id = uid();
+                    if (seenExpIds.has(e.id)) return false;
+                    seenExpIds.add(e.id);
+                    return true;
+                });
+            }
+            return data;
+        }
+        function saveFinance(data) {
+            localStorage.setItem('qitha_finance', JSON.stringify(data));
+            if (isFinanceLoaded) saveFinanceToSheets(); // Only auto-save AFTER initial load
+        }
+        function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+        // ── Month/Year helpers ─────────────────────────────────────────
+        function getSelectedMonthYear() {
+            return {
+                month: parseInt(document.getElementById('finMonth').value),
+                year: parseInt(document.getElementById('finYear').value)
+            };
+        }
+
+        function isSameMonth(dateStr, month, year) {
+            if (!dateStr) return false;
+            // Robust parsing: extract YYYY and MM from string
+            const parts = String(dateStr).split('-'); // Expects YYYY-MM-DD
+            if (parts.length < 2) return false;
+            const y = parseInt(parts[0]);
+            const m = parseInt(parts[1]) - 1; // 0-indexed
+            return m === month && y === year;
+        }
+
+        // ── Initialize month/year selectors ───────────────────────────
+        (function initFinanceDatePickers() {
+            const now = new Date();
+            const yearSel = document.getElementById('finYear');
+            for (let y = now.getFullYear() - 2; y <= now.getFullYear() + 1; y++) {
+                const o = document.createElement('option');
+                o.value = y; o.textContent = y;
+                yearSel.appendChild(o);
+            }
+            document.getElementById('finMonth').value = now.getMonth();
+            yearSel.value = now.getFullYear();
+
+            // Default dates for add-forms
+            const today = now.toISOString().slice(0, 10);
+            document.getElementById('otDate').value = today;
+            document.getElementById('expDate').value = today;
+
+            // Auto-load from Sheets on startup
+            loadFinanceFromSheets();
+        })();
+
+        // ══════════════════════════════════════════════════════════════
+        // ADD / DELETE
+        // ══════════════════════════════════════════════════════════════
+        function addMonthlyContributor() {
+            const name = document.getElementById('mcName').value.trim();
+            const amount = parseFloat(document.getElementById('mcAmount').value);
+            if (!name || !amount) { alert('Please enter name and amount.'); return; }
+            const { month, year } = getSelectedMonthYear();
+            // Use the 1st of the selected month as the date
+            const date = `${year}-${String(month + 1).padStart(2, '0')}-01`;
+            const fin = getFinance();
+            fin.contributions.push({ id: uid(), date, name, amount, type: 'monthly' });
+            saveFinance(fin);
+            document.getElementById('mcName').value = '';
+            document.getElementById('mcAmount').value = '';
+            renderFinance();
+        }
+
+        function deleteContribution(id) {
+            const fin = getFinance();
+            fin.contributions = fin.contributions.filter(x => x.id !== id);
+            saveFinance(fin); renderFinance();
+        }
+
+        function addOnetimeContribution() {
+            const name = document.getElementById('otName').value.trim();
+            const amount = parseFloat(document.getElementById('otAmount').value);
+            const date = document.getElementById('otDate').value;
+            if (!name || !amount || !date) { alert('Please fill all fields.'); return; }
+            const fin = getFinance();
+            fin.contributions.push({ id: uid(), date, name, amount, type: 'onetime' });
+            saveFinance(fin);
+            document.getElementById('otName').value = '';
+            document.getElementById('otAmount').value = '';
+            renderFinance();
+        }
+
+        function addExpense() {
+            const date = document.getElementById('expDate').value;
+            const particulars = document.getElementById('expParticulars').value.trim();
+            const amount = parseFloat(document.getElementById('expAmount').value);
+            if (!date || !particulars || !amount) { alert('Please fill all fields.'); return; }
+            const fin = getFinance();
+            fin.expenses.push({ id: uid(), date, particulars, amount });
+            saveFinance(fin);
+            document.getElementById('expParticulars').value = '';
+            document.getElementById('expAmount').value = '';
+            renderFinance();
+        }
+
+        function deleteExpense(id) {
+            const fin = getFinance();
+            fin.expenses = fin.expenses.filter(x => x.id !== id);
+            saveFinance(fin); renderFinance();
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // RENDER
+        // ══════════════════════════════════════════════════════════════
+        let finChartObj = null;
+
+        function fmt(n) { return '₹' + n.toLocaleString('en-IN'); }
+
+        function renderFinance() {
+            const fin = getFinance();
+            const { month, year } = getSelectedMonthYear();
+
+            // ── Monthly contributors for selected month only
+            const mcFiltered = fin.contributions.filter(c => c.type === 'monthly' && isSameMonth(c.date, month, year));
+            const mcList = document.getElementById('monthlyContributorList');
+            mcList.innerHTML = mcFiltered.length === 0
+                ? '<p style="font-size:13px;color:var(--text-secondary);">No monthly contributors for this month.</p>'
+                : mcFiltered.map(c => `
+                    <div class="fin-entry">
+                        <div class="fin-entry-info">
+                            <div class="ei-main">${c.name}</div>
+                            <div class="ei-sub">Monthly — ${c.date}</div>
+                        </div>
+                        <div class="fin-entry-amt">${fmt(c.amount)}</div>
+                        <button class="fin-del-btn" onclick="deleteContribution('${c.id}')">🗑</button>
+                    </div>`).join('');
+
+            // ── One-time contributions for selected month
+            const otFiltered = fin.contributions.filter(c => c.type === 'onetime' && isSameMonth(c.date, month, year));
+            const otList = document.getElementById('onetimeList');
+            otList.innerHTML = otFiltered.length === 0
+                ? '<p style="font-size:13px;color:var(--text-secondary);">No one-time contributions this month.</p>'
+                : otFiltered.map(c => `
+                    <div class="fin-entry">
+                        <div class="fin-entry-info">
+                            <div class="ei-main">${c.name}</div>
+                            <div class="ei-sub">${c.date}</div>
+                        </div>
+                        <div class="fin-entry-amt">${fmt(c.amount)}</div>
+                        <button class="fin-del-btn" onclick="deleteContribution('${c.id}')">🗑</button>
+                    </div>`).join('');
+
+            // ── Expenses filtered to selected month
+            const expFiltered = fin.expenses.filter(e => isSameMonth(e.date, month, year));
+            const expList = document.getElementById('expenseList');
+            expList.innerHTML = expFiltered.length === 0
+                ? '<p style="font-size:13px;color:var(--text-secondary);">No expenses this month.</p>'
+                : expFiltered.map(e => `
+                    <div class="fin-entry">
+                        <div class="fin-entry-info">
+                            <div class="ei-main">${e.particulars}</div>
+                            <div class="ei-sub">${e.date}</div>
+                        </div>
+                        <div class="fin-entry-amt" style="color:#d32f2f;">${fmt(e.amount)}</div>
+                        <button class="fin-del-btn" onclick="deleteExpense('${e.id}')">🗑</button>
+                    </div>`).join('');
+
+            // ── Summary — all contributions for selected month + expenses
+            const allIncomeThisMonth = fin.contributions.filter(c => isSameMonth(c.date, month, year));
+            const totalIncome = allIncomeThisMonth.reduce((s, c) => s + c.amount, 0);
+            const totalExpense = expFiltered.reduce((s, e) => s + e.amount, 0);
+            const balance = totalIncome - totalExpense;
+
+            document.getElementById('sumIncome').textContent = fmt(totalIncome);
+            document.getElementById('sumExpense').textContent = fmt(totalExpense);
+            const balEl = document.getElementById('sumBalance');
+            balEl.textContent = fmt(balance);
+            balEl.style.color = balance >= 0 ? '#355e3b' : '#d32f2f';
+
+            renderChart(fin);
+        }
+
+        function renderChart(fin) {
+            const labels = [], incomes = [], expenses = [];
+            const now = new Date();
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const m = d.getMonth(), y = d.getFullYear();
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                labels.push(monthNames[m] + ' ' + y);
+
+                const income = fin.contributions.filter(c => isSameMonth(c.date, m, y)).reduce((s, c) => s + c.amount, 0);
+                const expense = fin.expenses.filter(e => isSameMonth(e.date, m, y)).reduce((s, e) => s + e.amount, 0);
+                incomes.push(income);
+                expenses.push(expense);
+            }
+
+            const ctx = document.getElementById('finChart').getContext('2d');
+            if (finChartObj) finChartObj.destroy();
+            finChartObj = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [
+                        { label: 'Income', data: incomes, backgroundColor: 'rgba(15,157,88,0.75)', borderRadius: 6 },
+                        { label: 'Expense', data: expenses, backgroundColor: 'rgba(211,47,47,0.65)', borderRadius: 6 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { callback: v => '₹' + v.toLocaleString('en-IN') } }
+                    }
+                }
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════════
+        // GOOGLE SHEETS SYNC
+        // ══════════════════════════════════════════════════════════════
+
+        async function saveFinanceToSheets() {
+            if (FINANCE_SHEETS_URL.includes('YOUR_FINANCE_SHEETS_APPS_SCRIPT_URL_HERE') || !isFinanceLoaded) return;
+            const statusEl = document.getElementById('finSyncStatus');
+            const fin = getFinance();
+            if (statusEl) statusEl.textContent = '☁️ Syncing...';
+            try {
+                const res = await fetch(FINANCE_SHEETS_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=save&data=' + encodeURIComponent(JSON.stringify(fin))
+                });
+                if (statusEl) statusEl.textContent = '✓ Synced';
+            } catch (err) {
+                console.error('Auto-save error:', err);
+                if (statusEl) statusEl.textContent = '⚠ Sync error';
+            }
+        }
+
+        async function loadFinanceFromSheets() {
+            if (FINANCE_SHEETS_URL.includes('YOUR_FINANCE_SHEETS_APPS_SCRIPT_URL_HERE')) {
+                isFinanceLoaded = true; return;
+            }
+            const statusEl = document.getElementById('finSyncStatus');
+            if (statusEl) statusEl.textContent = '☁️ Loading...';
+            try {
+                const res = await fetch(FINANCE_SHEETS_URL + '?action=load');
+                let data = await res.json();
+                
+                if (data && (data.contributions || data.expenses)) {
+                    // CRITICAL: De-duplicate before saving to break the sync-loop growth
+                    data = deDuplicateFinance(data);
+                    
+                    localStorage.setItem('qitha_finance', JSON.stringify(data));
+                    renderFinance();
+                    if (statusEl) statusEl.textContent = '✓ Loaded';
+                }
+            } catch (err) {
+                console.error('Auto-load error:', err);
+                if (statusEl) statusEl.textContent = '⚠ Load error';
+            } finally {
+                isFinanceLoaded = true;
+            }
         }
     </script>
 

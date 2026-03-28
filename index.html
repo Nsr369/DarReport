@@ -20,10 +20,13 @@
     <style>
         :root {
             /* Premium Islamic Minimal Palette */
-            --primary: #1e3a1a; /* Deep Forest Green */
-            --primary-light: #e8f4ec; /* Soft Sage */
+            --primary: #1e3a1a;
+            /* Deep Forest Green */
+            --primary-light: #e8f4ec;
+            /* Soft Sage */
             --primary-dark: #142a12;
-            --accent: #d4af37; /* Gold Accent */
+            --accent: #d4af37;
+            /* Gold Accent */
             --bg-color: #f7f9f7;
             --surface-color: #ffffff;
             --text-primary: #1a202c;
@@ -33,7 +36,7 @@
             --shadow-2: 0 10px 30px rgba(30, 58, 26, 0.1);
             --radius-md: 20px;
             --radius-sm: 12px;
-            
+
             /* Glassmorphism */
             --glass-bg: rgba(255, 255, 255, 0.7);
             --glass-border: rgba(255, 255, 255, 0.3);
@@ -573,13 +576,14 @@
             color: var(--text-primary);
             outline: none;
         }
+
         .summary-bar {
             display: flex;
             gap: 12px;
             margin-bottom: 28px;
             flex-wrap: wrap;
         }
-        
+
         .summary-card {
             flex: 1;
             min-width: 100px;
@@ -604,14 +608,25 @@
         .summary-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
             background: var(--primary);
             opacity: 0.8;
         }
 
-        .summary-card.income::before { background: linear-gradient(90deg, #0f9d58, #34a853); }
-        .summary-card.expense::before { background: linear-gradient(90deg, #d32f2f, #ea4335); }
-        .summary-card.balance::before { background: linear-gradient(90deg, var(--primary), var(--accent)); }
+        .summary-card.income::before {
+            background: linear-gradient(90deg, #0f9d58, #34a853);
+        }
+
+        .summary-card.expense::before {
+            background: linear-gradient(90deg, #d32f2f, #ea4335);
+        }
+
+        .summary-card.balance::before {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
 
         .summary-card .s-label {
             font-size: 10px;
@@ -627,16 +642,17 @@
             font-weight: 800;
             letter-spacing: -0.5px;
         }
+
         .fin-entry {
             display: flex;
             align-items: center;
             gap: 12px;
             background: var(--surface-color);
-            border: 1px solid rgba(0,0,0,0.03);
+            border: 1px solid rgba(0, 0, 0, 0.03);
             border-radius: var(--radius-sm);
             padding: 14px 18px;
             margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
             transition: all 0.2s ease;
         }
 
@@ -765,6 +781,7 @@
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 16px;
         }
+
         .mureed-card {
             background: var(--surface-color);
             border: 1px solid var(--border-color);
@@ -774,51 +791,141 @@
             position: relative;
             transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
+
         .mureed-card:hover {
             box-shadow: var(--shadow-2);
             transform: translateY(-2px);
         }
+
         .mureed-card h4 {
-            margin-top: 0; margin-bottom: 8px; color: var(--primary); font-size: 17px;
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 17px;
         }
+
         .mureed-card p {
-            margin: 0; font-size: 14px; margin-bottom: 6px; color: var(--text-secondary);
+            margin: 0;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
         }
+
         .mureed-card .m-actions {
-            position: absolute; top: 12px; right: 12px; display: flex; gap: 4px;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 4px;
         }
+
         .mureed-card .m-actions button {
-            background: none; border: none; font-size: 14px; cursor: pointer; padding: 6px; box-shadow: none; color: var(--text-secondary); border-radius: 4px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 6px;
+            box-shadow: none;
+            color: var(--text-secondary);
+            border-radius: 4px;
         }
+
         .mureed-card .m-actions button:hover {
-            color: var(--primary); background: var(--primary-light); transform: none; box-shadow: none;
+            color: var(--primary);
+            background: var(--primary-light);
+            transform: none;
+            box-shadow: none;
         }
+
         .mureed-list-view {
-            width: 100%; border-collapse: collapse; background: var(--surface-color); border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-1);
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface-color);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow-1);
         }
-        .mureed-list-view th, .mureed-list-view td {
-            text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary);
+
+        .mureed-list-view th,
+        .mureed-list-view td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            color: var(--text-primary);
         }
+
         .mureed-list-view th {
-            background: var(--primary-light); color: var(--primary); font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
         }
-        .mureed-list-view tr:last-child td { border-bottom: none; }
-        .mureed-list-view tr:hover { background-color: rgba(0,0,0,0.01); }
-        
+
+        .mureed-list-view tr:last-child td {
+            border-bottom: none;
+        }
+
+        .mureed-list-view tr:hover {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
         /* Modal Styles */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
         }
-        .modal-overlay.show { display: flex; }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
         .modal-content {
-            background: var(--surface-color); width: 90%; max-width: 400px; padding: 24px; border-radius: var(--radius-md); box-shadow: var(--shadow-2);
-            max-height: 90vh; overflow-y: auto;
+            background: var(--surface-color);
+            width: 90%;
+            max-width: 400px;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-2);
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .modal-content h3 { margin-top: 0; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
-        .modal-actions button { padding: 8px 20px; font-size: 14px; margin: 0; }
-        .btn-cancel { background-color: #fce8e8; color: #d32f2f; }
-        .btn-cancel:hover { background-color: #fad1d1; }
+
+        .modal-content h3 {
+            margin-top: 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .modal-actions button {
+            padding: 8px 20px;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .btn-cancel {
+            background-color: #fce8e8;
+            color: #d32f2f;
+        }
+
+        .btn-cancel:hover {
+            background-color: #fad1d1;
+        }
     </style>
 </head>
 
@@ -1370,22 +1477,27 @@
 
             <!-- Controls (Search & View Toggle) -->
             <div style="display: flex; gap: 12px; margin-bottom: 24px; align-items: center; flex-wrap: wrap;">
-                <input type="text" id="mureedSearch" placeholder="Search by name, place, phone..." oninput="renderMureeds()" style="flex: 1; min-width: 150px; max-width: 350px;">
-                <select id="mureedFilterType" onchange="renderMureeds()" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 14px;">
+                <input type="text" id="mureedSearch" placeholder="Search by name, place, phone..."
+                    oninput="renderMureeds()" style="flex: 1; min-width: 150px; max-width: 350px;">
+                <select id="mureedFilterType" onchange="renderMureeds()"
+                    style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 14px;">
                     <option value="All">All Types</option>
                     <option value="റിജാൽ">റിജാൽ (Rijal)</option>
                     <option value="സയ്യിദാത്ത്">സയ്യിദാത്ത് (Sayyidath)</option>
                     <option value="Kids">Kids</option>
                 </select>
                 <div class="radio-group" style="margin: 0; display: flex; align-items: center;">
-                    <label style="margin-top: 0;"><input type="radio" name="mureedViewMode" value="card" checked onchange="renderMureeds()"> 🪟 Card</label>
-                    <label style="margin-top: 0; margin-right: 0;"><input type="radio" name="mureedViewMode" value="list" onchange="renderMureeds()"> 📄 List</label>
+                    <label style="margin-top: 0;"><input type="radio" name="mureedViewMode" value="card" checked
+                            onchange="renderMureeds()"> 🪟 Card</label>
+                    <label style="margin-top: 0; margin-right: 0;"><input type="radio" name="mureedViewMode"
+                            value="list" onchange="renderMureeds()"> 📄 List</label>
                 </div>
                 <button class="fin-add-btn" onclick="openMureedModal()" style="margin-left: auto;">+ Add Mureed</button>
             </div>
 
             <div id="mureedsContainer"></div>
-            <div id="mureedSyncStatus" style="font-size: 11px; color: var(--text-secondary); text-align: right; margin-top: 10px;"></div>
+            <div id="mureedSyncStatus"
+                style="font-size: 11px; color: var(--text-secondary); text-align: right; margin-top: 10px;"></div>
         </div>
     </div> <!-- End mureedTab -->
 
@@ -1396,17 +1508,23 @@
                 <h2 style="margin: 0;">📅 Monthly Tracker</h2>
                 <div style="display: flex; gap: 8px;">
                     <button class="fin-add-btn" onclick="addMonthlyPerson()" style="margin:0;">+ Add Name</button>
-                    <button class="fin-add-btn" onclick="shareMonthlyTracker()" style="margin:0; background: #4CAF50;">📤 Share</button>
+                    <button class="fin-add-btn" onclick="shareMonthlyTracker()"
+                        style="margin:0; background: #4CAF50;">📤 Share</button>
                 </div>
             </div>
-            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">Tap a cell to ✅ mark payment. Tap <strong>Share</strong> to send as image to WhatsApp.</p>
-            <div id="monthlySyncStatus" style="font-size: 12px; color: var(--text-secondary); font-weight: bold; margin-bottom: 8px;"></div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">Tap a cell to ✅ mark payment.
+                Tap <strong>Share</strong> to send as image to WhatsApp.</p>
+            <div id="monthlySyncStatus"
+                style="font-size: 12px; color: var(--text-secondary); font-weight: bold; margin-bottom: 8px;"></div>
 
-            <div id="monthlyTrackerWrapper" style="background: white; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+            <div id="monthlyTrackerWrapper"
+                style="background: white; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
                 <table id="monthlyTable" style="width: 100%; border-collapse: collapse; font-size: 13px;">
                     <thead>
                         <tr style="background: #f8f9fa;">
-                            <th style="min-width: 120px; padding: 10px 12px; border: 1px solid var(--border-color); text-align: left; position: sticky; left: 0; background: #f8f9fa; z-index: 10;">Name</th>
+                            <th
+                                style="min-width: 120px; padding: 10px 12px; border: 1px solid var(--border-color); text-align: left; position: sticky; left: 0; background: #f8f9fa; z-index: 10;">
+                                Name</th>
                             <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Jan</th>
                             <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Feb</th>
                             <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Mar</th>
@@ -1419,7 +1537,8 @@
                             <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Oct</th>
                             <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Nov</th>
                             <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Dec</th>
-                            <th class="monthly-del-col" style="padding: 8px; border: 1px solid var(--border-color);">Del</th>
+                            <th class="monthly-del-col" style="padding: 8px; border: 1px solid var(--border-color);">Del
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="monthlyTableBody"></tbody>
@@ -2249,10 +2368,10 @@
         // Helper to remove duplicates from array of entries
         function deDuplicateFinance(data) {
             if (!data) return { contributions: [], expenses: [] };
-            
+
             const seenIds = new Set();
             const seenFingerprints = new Set();
-            
+
             const process = (arr, isExpense) => {
                 if (!arr) return [];
                 return arr.filter(item => {
@@ -2261,24 +2380,24 @@
                         if (seenIds.has(item.id)) return false;
                         seenIds.add(item.id);
                     }
-                    
+
                     // 2. Check Content-based duplicates (for Sheet-edited entries)
                     // We combine Date, Name/Particulars, and Amount into a unique string
                     const name = (isExpense ? item.particulars : item.name) || "";
                     const fingerprint = `${item.date}|${name.trim()}|${item.amount}`;
-                    
+
                     if (seenFingerprints.has(fingerprint)) {
                         console.warn("De-duplicating entry:", fingerprint);
                         return false;
                     }
                     seenFingerprints.add(fingerprint);
-                    
+
                     // Assign ID if missing
                     if (!item.id) item.id = uid();
                     return true;
                 });
             };
-            
+
             data.contributions = process(data.contributions, false);
             data.expenses = process(data.expenses, true);
             return data;
@@ -2523,11 +2642,11 @@
             try {
                 const res = await fetch(FINANCE_SHEETS_URL + '?action=load');
                 let data = await res.json();
-                
+
                 if (data && (data.contributions || data.expenses || data.monthly)) {
                     // CRITICAL: De-duplicate before saving to break the sync-loop growth
                     data = deDuplicateFinance(data);
-                    
+
                     localStorage.setItem('qitha_finance', JSON.stringify({ contributions: data.contributions, expenses: data.expenses }));
                     if (data.monthly) {
                         localStorage.setItem('qitha_monthly_track', JSON.stringify(data.monthly));
@@ -2621,7 +2740,7 @@
             const modal = document.getElementById('mureedModal');
             document.getElementById('mureedId').value = id || '';
             const title = document.getElementById('mureedModalTitle');
-            
+
             // ALWAYS CLEAR PREVIOUS FILE SO IT DOESN'T CARRY OVER TO NEXT PERSON
             const imgInput = document.getElementById('mureedImageInput');
             if (imgInput) imgInput.value = '';
@@ -2643,7 +2762,7 @@
                     document.getElementById('mureedPhone').value = mureed.phone || '';
                     document.getElementById('mureedRemark').value = mureed.remark || '';
                     document.getElementById('mureedImageBase64').value = mureed.image || '';
-                    
+
                     let safeImg = getSafeImgUrl(mureed.image);
                     if (safeImg) {
                         document.getElementById('mureedImagePreview').src = safeImg;
@@ -2672,7 +2791,7 @@
         function saveMureedForm() {
             const id = document.getElementById('mureedId').value;
             const name = m('mureedName');
-            
+
             if (!name) { alert('MUSTHARSHID NAME is required'); return; }
 
             const entry = {
@@ -2717,7 +2836,7 @@
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const dataUrl = e.target.result;
                 document.getElementById('mureedImageBase64').value = dataUrl;
                 document.getElementById('mureedImagePreview').src = dataUrl;
@@ -2729,15 +2848,15 @@
         function renderMureeds() {
             const container = document.getElementById('mureedsContainer');
             const mureeds = getMureeds() || [];
-            
+
             const searchTerm = document.getElementById('mureedSearch').value.toLowerCase();
             const filterType = document.getElementById('mureedFilterType') ? document.getElementById('mureedFilterType').value : 'All';
 
             const filtered = mureeds.filter(m => {
-                const matchesSearch = String(m.name || '').toLowerCase().includes(searchTerm) || 
-                                      String(m.phone || '').toLowerCase().includes(searchTerm) || 
-                                      String(m.address || '').toLowerCase().includes(searchTerm) ||
-                                      String(m.murshid || '').toLowerCase().includes(searchTerm);
+                const matchesSearch = String(m.name || '').toLowerCase().includes(searchTerm) ||
+                    String(m.phone || '').toLowerCase().includes(searchTerm) ||
+                    String(m.address || '').toLowerCase().includes(searchTerm) ||
+                    String(m.murshid || '').toLowerCase().includes(searchTerm);
                 const matchesType = filterType === 'All' || m.type === filterType;
                 return matchesSearch && matchesType;
             });
@@ -2763,7 +2882,7 @@
                             ${safeImg ? `<img src="${safeImg}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-light);">` : `<div style="width:50px; height:50px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:var(--primary); font-weight:bold; font-size:20px;">${m.name.charAt(0)}</div>`}
                             <div>
                                 <h4 style="margin:0; margin-bottom:4px;">${m.name}</h4>
-                                <p style="font-size: 12px; color: ${m.type==='റിജാൽ' ? '#3f51b5' : (m.type==='സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')}; font-weight:600; margin:0;">${m.type}</p>
+                                <p style="font-size: 12px; color: ${m.type === 'റിജാൽ' ? '#3f51b5' : (m.type === 'സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')}; font-weight:600; margin:0;">${m.type}</p>
                             </div>
                         </div>
                         <p><strong>🤲 Murshid:</strong> ${m.murshid || '-'}</p>
@@ -2772,10 +2891,10 @@
                         <p><strong>🏡 Address:</strong> ${m.address || '-'}</p>
                         <hr style="border: 0; border-top: 1px dashed #eee; margin: 10px 0;" />
                         <div style="font-size:12px; color:var(--text-secondary); display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
-                            <span><strong>Age:</strong> ${m.age||'-'}</span>
-                            <span><strong>Kithab:</strong> ${m.kithab||'-'}</span>
-                            <span><strong>Marhala:</strong> ${m.marhala||'-'}</span>
-                            <span><strong>Ershad:</strong> ${m.ershad||'-'}</span>
+                            <span><strong>Age:</strong> ${m.age || '-'}</span>
+                            <span><strong>Kithab:</strong> ${m.kithab || '-'}</span>
+                            <span><strong>Marhala:</strong> ${m.marhala || '-'}</span>
+                            <span><strong>Ershad:</strong> ${m.ershad || '-'}</span>
                         </div>
                         ${m.remark ? `<p style="font-size:12px; color:var(--text-secondary); margin-top:8px;"><strong>Remark:</strong> ${m.remark}</p>` : ''}
                     </div>
@@ -2786,7 +2905,7 @@
                     return `
                     <tr>
                         <td>${safeImg ? `<img src="${safeImg}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:1px solid var(--border-color);">` : `<div style="width:30px; height:30px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:14px; font-weight:bold;">${m.name.charAt(0)}</div>`}</td>
-                        <td><span style="display:inline-block; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:600; background-color:${m.type==='റിജാൽ' ? '#e8edf4' : (m.type==='സയ്യിദാത്ത്' ? '#fce8ef' : '#fff3e0')}; color:${m.type==='റിജാൽ' ? '#3f51b5' : (m.type==='സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')};">${m.type}</span></td>
+                        <td><span style="display:inline-block; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:600; background-color:${m.type === 'റിജാൽ' ? '#e8edf4' : (m.type === 'സയ്യിദാത്ത്' ? '#fce8ef' : '#fff3e0')}; color:${m.type === 'റിജാൽ' ? '#3f51b5' : (m.type === 'സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')};">${m.type}</span></td>
                         <td><strong>${m.name}</strong></td>
                         <td>${m.phone || '-'}</td>
                         <td>${m.murshid || '-'}</td>
@@ -2808,9 +2927,10 @@
         <div class="modal-content">
             <h3 id="mureedModalTitle">Add Mureed</h3>
             <input type="hidden" id="mureedId">
-            
+
             <label>Type</label>
-            <select id="mureedType" style="width:100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 15px; margin-bottom: 8px;">
+            <select id="mureedType"
+                style="width:100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 15px; margin-bottom: 8px;">
                 <option value="റിജാൽ">റിജാൽ (Rijal)</option>
                 <option value="സയ്യിദാത്ത്">സയ്യിദാത്ത് (Sayyidath)</option>
                 <option value="Kids">Kids</option>
@@ -2821,8 +2941,10 @@
 
             <label>Photo</label>
             <div style="margin-bottom: 8px; display:flex; gap:10px; align-items:center;">
-                <input type="file" id="mureedImageInput" accept="image/*" capture="environment" onchange="processMureedImage(event)" style="flex:1;">
-                <img id="mureedImagePreview" style="display:none; width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid var(--border-color);">
+                <input type="file" id="mureedImageInput" accept="image/*" onchange="processMureedImage(event)"
+                    style="flex:1;">
+                <img id="mureedImagePreview"
+                    style="display:none; width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid var(--border-color);">
                 <input type="hidden" id="mureedImageBase64">
             </div>
 
@@ -2869,114 +2991,115 @@
             </div>
         </div>
     </div>
-<script>
-    // ══════════════════════════════════════════════════════════════
-    // MONTHLY TRACKER  (localStorage key: qitha_monthly_track)
-    // ══════════════════════════════════════════════════════════════
-    const MONTHS_LIST = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    <script>
+        // ══════════════════════════════════════════════════════════════
+        // MONTHLY TRACKER  (localStorage key: qitha_monthly_track)
+        // ══════════════════════════════════════════════════════════════
+        const MONTHS_LIST = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
-    function getMonthlyData() {
-        return JSON.parse(localStorage.getItem('qitha_monthly_track') || '[]');
-    }
-
-    function saveMonthlyData(data) {
-        localStorage.setItem('qitha_monthly_track', JSON.stringify(data));
-        const el = document.getElementById('monthlySyncStatus');
-        if (el) el.textContent = '✓ Saved locally';
-        if (isFinanceLoaded) saveFinanceToSheets(); // Auto-sync with Finance backend
-    }
-
-    function renderMonthlyTracker() {
-        const data = getMonthlyData();
-        const tbody = document.getElementById('monthlyTableBody');
-        if (!tbody) return;
-
-        if (data.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; padding: 24px; color: var(--text-secondary);">No entries yet. Click <strong>+ Add Name</strong> to get started!</td></tr>`;
-            return;
+        function getMonthlyData() {
+            return JSON.parse(localStorage.getItem('qitha_monthly_track') || '[]');
         }
 
-        tbody.innerHTML = data.map((person, idx) => {
-            const rowBg = idx % 2 === 0 ? '#ffffff' : '#fafafa';
-            const cells = MONTHS_LIST.map(m => {
-                const checked = person.months && person.months[m] === true;
-                return `<td onclick="toggleTick('${person.id}','${m}')" style="cursor:pointer; text-align:center; padding: 6px; border: 1px solid var(--border-color); font-size: 16px; user-select: none;">${checked ? '✅' : '○'}</td>`;
-            }).join('');
-            return `<tr style="background:${rowBg};">
+        function saveMonthlyData(data) {
+            localStorage.setItem('qitha_monthly_track', JSON.stringify(data));
+            const el = document.getElementById('monthlySyncStatus');
+            if (el) el.textContent = '✓ Saved locally';
+            if (isFinanceLoaded) saveFinanceToSheets(); // Auto-sync with Finance backend
+        }
+
+        function renderMonthlyTracker() {
+            const data = getMonthlyData();
+            const tbody = document.getElementById('monthlyTableBody');
+            if (!tbody) return;
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; padding: 24px; color: var(--text-secondary);">No entries yet. Click <strong>+ Add Name</strong> to get started!</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map((person, idx) => {
+                const rowBg = idx % 2 === 0 ? '#ffffff' : '#fafafa';
+                const cells = MONTHS_LIST.map(m => {
+                    const checked = person.months && person.months[m] === true;
+                    return `<td onclick="toggleTick('${person.id}','${m}')" style="cursor:pointer; text-align:center; padding: 6px; border: 1px solid var(--border-color); font-size: 16px; user-select: none;">${checked ? '✅' : '○'}</td>`;
+                }).join('');
+                return `<tr style="background:${rowBg};">
                 <td style="padding: 8px 12px; border: 1px solid var(--border-color); font-weight: 600; position: sticky; left:0; background:${rowBg}; z-index:5;">${person.name}</td>
                 ${cells}
                 <td class="monthly-del-col" style="text-align:center; border: 1px solid var(--border-color); padding: 4px;">
                     <button onclick="deleteMonthlyRow('${person.id}')" style="background:none; border:none; cursor:pointer; font-size:16px;" title="Remove">🗑️</button>
                 </td>
             </tr>`;
-        }).join('');
-    }
-
-    function addMonthlyPerson() {
-        const name = prompt('Enter person\'s name:');
-        if (!name || !name.trim()) return;
-        const data = getMonthlyData();
-        // uid() is defined in the main script block
-        data.push({ id: uid(), name: name.trim(), months: {} });
-        saveMonthlyData(data);
-        renderMonthlyTracker();
-    }
-
-    function toggleTick(id, month) {
-        const data = getMonthlyData();
-        const person = data.find(p => p.id === id);
-        if (!person) return;
-        person.months = person.months || {};
-        person.months[month] = !person.months[month];
-        saveMonthlyData(data);
-        renderMonthlyTracker();
-    }
-
-    function deleteMonthlyRow(id) {
-        if (!confirm('Remove this person from the tracker?')) return;
-        let data = getMonthlyData().filter(p => p.id !== id);
-        saveMonthlyData(data);
-        renderMonthlyTracker();
-    }
-
-    async function shareMonthlyTracker() {
-        const wrapper = document.getElementById('monthlyTrackerWrapper');
-        const delCols = document.querySelectorAll('.monthly-del-col');
-        
-        // Hide delete column for screenshot
-        delCols.forEach(el => el.style.display = 'none');
-        
-        const badge = document.createElement('div');
-        badge.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1e3a1a;color:white;padding:10px 24px;border-radius:20px;z-index:9999;font-weight:bold;';
-        badge.textContent = '📸 Generating image...';
-        document.body.appendChild(badge);
-
-        try {
-            const table = document.getElementById('monthlyTable');
-            const canvas = await html2canvas(table, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
-            canvas.toBlob(async (blob) => {
-                if (!blob) { alert('Failed to generate image.'); return; }
-                const file = new File([blob], 'MonthlyTracker.png', { type: 'image/png' });
-                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({ title: 'Monthly Tracker', files: [file] });
-                } else {
-                    // Fallback: download the image
-                    const a = document.createElement('a');
-                    a.download = 'MonthlyTracker.png';
-                    a.href = canvas.toDataURL('image/png');
-                    a.click();
-                    alert('Image saved! Attach it manually in WhatsApp.');
-                }
-            }, 'image/png');
-        } catch (err) {
-            console.error(err);
-            alert('Error generating screenshot: ' + err.message);
-        } finally {
-            badge.remove();
-            delCols.forEach(el => el.style.display = '');
+            }).join('');
         }
-    }
-</script>
+
+        function addMonthlyPerson() {
+            const name = prompt('Enter person\'s name:');
+            if (!name || !name.trim()) return;
+            const data = getMonthlyData();
+            // uid() is defined in the main script block
+            data.push({ id: uid(), name: name.trim(), months: {} });
+            saveMonthlyData(data);
+            renderMonthlyTracker();
+        }
+
+        function toggleTick(id, month) {
+            const data = getMonthlyData();
+            const person = data.find(p => p.id === id);
+            if (!person) return;
+            person.months = person.months || {};
+            person.months[month] = !person.months[month];
+            saveMonthlyData(data);
+            renderMonthlyTracker();
+        }
+
+        function deleteMonthlyRow(id) {
+            if (!confirm('Remove this person from the tracker?')) return;
+            let data = getMonthlyData().filter(p => p.id !== id);
+            saveMonthlyData(data);
+            renderMonthlyTracker();
+        }
+
+        async function shareMonthlyTracker() {
+            const wrapper = document.getElementById('monthlyTrackerWrapper');
+            const delCols = document.querySelectorAll('.monthly-del-col');
+
+            // Hide delete column for screenshot
+            delCols.forEach(el => el.style.display = 'none');
+
+            const badge = document.createElement('div');
+            badge.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1e3a1a;color:white;padding:10px 24px;border-radius:20px;z-index:9999;font-weight:bold;';
+            badge.textContent = '📸 Generating image...';
+            document.body.appendChild(badge);
+
+            try {
+                const table = document.getElementById('monthlyTable');
+                const canvas = await html2canvas(table, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+                canvas.toBlob(async (blob) => {
+                    if (!blob) { alert('Failed to generate image.'); return; }
+                    const file = new File([blob], 'MonthlyTracker.png', { type: 'image/png' });
+                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({ title: 'Monthly Tracker', files: [file] });
+                    } else {
+                        // Fallback: download the image
+                        const a = document.createElement('a');
+                        a.download = 'MonthlyTracker.png';
+                        a.href = canvas.toDataURL('image/png');
+                        a.click();
+                        alert('Image saved! Attach it manually in WhatsApp.');
+                    }
+                }, 'image/png');
+            } catch (err) {
+                console.error(err);
+                alert('Error generating screenshot: ' + err.message);
+            } finally {
+                badge.remove();
+                delCols.forEach(el => el.style.display = '');
+            }
+        }
+    </script>
 
 </body>
+
 </html>

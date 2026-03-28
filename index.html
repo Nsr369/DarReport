@@ -8,6 +8,7 @@
     <title>Qitha | Report & Finance</title>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -757,6 +758,67 @@
             height: 240px;
             margin-top: 16px;
         }
+
+        /* ── Mureed Styles ── */
+        .mureed-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .mureed-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: var(--shadow-1);
+            position: relative;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .mureed-card:hover {
+            box-shadow: var(--shadow-2);
+            transform: translateY(-2px);
+        }
+        .mureed-card h4 {
+            margin-top: 0; margin-bottom: 8px; color: var(--primary); font-size: 17px;
+        }
+        .mureed-card p {
+            margin: 0; font-size: 14px; margin-bottom: 6px; color: var(--text-secondary);
+        }
+        .mureed-card .m-actions {
+            position: absolute; top: 12px; right: 12px; display: flex; gap: 4px;
+        }
+        .mureed-card .m-actions button {
+            background: none; border: none; font-size: 14px; cursor: pointer; padding: 6px; box-shadow: none; color: var(--text-secondary); border-radius: 4px;
+        }
+        .mureed-card .m-actions button:hover {
+            color: var(--primary); background: var(--primary-light); transform: none; box-shadow: none;
+        }
+        .mureed-list-view {
+            width: 100%; border-collapse: collapse; background: var(--surface-color); border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-1);
+        }
+        .mureed-list-view th, .mureed-list-view td {
+            text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-primary);
+        }
+        .mureed-list-view th {
+            background: var(--primary-light); color: var(--primary); font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;
+        }
+        .mureed-list-view tr:last-child td { border-bottom: none; }
+        .mureed-list-view tr:hover { background-color: rgba(0,0,0,0.01); }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-content {
+            background: var(--surface-color); width: 90%; max-width: 400px; padding: 24px; border-radius: var(--radius-md); box-shadow: var(--shadow-2);
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-content h3 { margin-top: 0; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+        .modal-actions button { padding: 8px 20px; font-size: 14px; margin: 0; }
+        .btn-cancel { background-color: #fce8e8; color: #d32f2f; }
+        .btn-cancel:hover { background-color: #fad1d1; }
     </style>
 </head>
 
@@ -766,6 +828,8 @@
     <div class="app-tabs">
         <button class="app-tab-btn active" id="tabReportBtn" onclick="showTab('report')">📋 Report</button>
         <button class="app-tab-btn" id="tabExpenseBtn" onclick="showTab('expense')">💰 Finance</button>
+        <button class="app-tab-btn" id="tabMureedBtn" onclick="showTab('mureed')">👥 Mureeds</button>
+        <button class="app-tab-btn" id="tabMonthlyBtn" onclick="showTab('monthly')">📅 Monthly</button>
     </div>
 
     <!-- ══ REPORT TAB ══ -->
@@ -1298,6 +1362,71 @@
 
         </div>
     </div> <!-- End expenseTab -->
+
+    <!-- ══ MUREED TAB ══ -->
+    <div id="mureedTab" style="display: none;">
+        <div class="container">
+            <h2>👥 Mureed Details</h2>
+
+            <!-- Controls (Search & View Toggle) -->
+            <div style="display: flex; gap: 12px; margin-bottom: 24px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="mureedSearch" placeholder="Search by name, place, phone..." oninput="renderMureeds()" style="flex: 1; min-width: 150px; max-width: 350px;">
+                <select id="mureedFilterType" onchange="renderMureeds()" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 14px;">
+                    <option value="All">All Types</option>
+                    <option value="റിജാൽ">റിജാൽ (Rijal)</option>
+                    <option value="സയ്യിദാത്ത്">സയ്യിദാത്ത് (Sayyidath)</option>
+                    <option value="Kids">Kids</option>
+                </select>
+                <div class="radio-group" style="margin: 0; display: flex; align-items: center;">
+                    <label style="margin-top: 0;"><input type="radio" name="mureedViewMode" value="card" checked onchange="renderMureeds()"> 🪟 Card</label>
+                    <label style="margin-top: 0; margin-right: 0;"><input type="radio" name="mureedViewMode" value="list" onchange="renderMureeds()"> 📄 List</label>
+                </div>
+                <button class="fin-add-btn" onclick="openMureedModal()" style="margin-left: auto;">+ Add Mureed</button>
+            </div>
+
+            <div id="mureedsContainer"></div>
+            <div id="mureedSyncStatus" style="font-size: 11px; color: var(--text-secondary); text-align: right; margin-top: 10px;"></div>
+        </div>
+    </div> <!-- End mureedTab -->
+
+    <!-- ══ MONTHLY TRACKER TAB ══ -->
+    <div id="monthlyTab" style="display: none;">
+        <div class="container">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                <h2 style="margin: 0;">📅 Monthly Tracker</h2>
+                <div style="display: flex; gap: 8px;">
+                    <button class="fin-add-btn" onclick="addMonthlyPerson()" style="margin:0;">+ Add Name</button>
+                    <button class="fin-add-btn" onclick="shareMonthlyTracker()" style="margin:0; background: #4CAF50;">📤 Share</button>
+                </div>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 14px;">Tap a cell to ✅ mark payment. Tap <strong>Share</strong> to send as image to WhatsApp.</p>
+            <div id="monthlySyncStatus" style="font-size: 12px; color: var(--text-secondary); font-weight: bold; margin-bottom: 8px;"></div>
+
+            <div id="monthlyTrackerWrapper" style="background: white; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow-x: auto;">
+                <table id="monthlyTable" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <thead>
+                        <tr style="background: #f8f9fa;">
+                            <th style="min-width: 120px; padding: 10px 12px; border: 1px solid var(--border-color); text-align: left; position: sticky; left: 0; background: #f8f9fa; z-index: 10;">Name</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Jan</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Feb</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Mar</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Apr</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">May</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Jun</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Jul</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Aug</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Sep</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Oct</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Nov</th>
+                            <th style="padding: 8px; border: 1px solid var(--border-color); min-width:38px;">Dec</th>
+                            <th class="monthly-del-col" style="padding: 8px; border: 1px solid var(--border-color);">Del</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthlyTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div> <!-- End monthlyTab -->
 
     <script>
         document.getElementById("date").valueAsDate = new Date();
@@ -2073,11 +2202,23 @@
         // ══════════════════════════════════════════════════════════════
         function showTab(tab) {
             const isExpense = tab === 'expense';
-            document.getElementById('reportTab').style.display = isExpense ? 'none' : 'block';
+            const isMureed = tab === 'mureed';
+            const isReport = tab === 'report';
+            const isMonthly = tab === 'monthly';
+
+            document.getElementById('reportTab').style.display = isReport ? 'block' : 'none';
             document.getElementById('expenseTab').style.display = isExpense ? 'block' : 'none';
-            document.getElementById('tabReportBtn').classList.toggle('active', !isExpense);
+            document.getElementById('mureedTab').style.display = isMureed ? 'block' : 'none';
+            document.getElementById('monthlyTab').style.display = isMonthly ? 'block' : 'none';
+
+            document.getElementById('tabReportBtn').classList.toggle('active', isReport);
             document.getElementById('tabExpenseBtn').classList.toggle('active', isExpense);
+            document.getElementById('tabMureedBtn').classList.toggle('active', isMureed);
+            document.getElementById('tabMonthlyBtn').classList.toggle('active', isMonthly);
+
             if (isExpense) renderFinance();
+            if (isMureed) renderMureeds();
+            if (isMonthly) renderMonthlyTracker();
         }
 
         // ══════════════════════════════════════════════════════════════
@@ -2358,6 +2499,7 @@
             if (FINANCE_SHEETS_URL.includes('YOUR_FINANCE_SHEETS_APPS_SCRIPT_URL_HERE') || !isFinanceLoaded) return;
             const statusEl = document.getElementById('finSyncStatus');
             const fin = getFinance();
+            fin.monthly = getMonthlyData(); // Include monthly data
             if (statusEl) statusEl.textContent = '☁️ Syncing...';
             try {
                 const res = await fetch(FINANCE_SHEETS_URL, {
@@ -2382,12 +2524,16 @@
                 const res = await fetch(FINANCE_SHEETS_URL + '?action=load');
                 let data = await res.json();
                 
-                if (data && (data.contributions || data.expenses)) {
+                if (data && (data.contributions || data.expenses || data.monthly)) {
                     // CRITICAL: De-duplicate before saving to break the sync-loop growth
                     data = deDuplicateFinance(data);
                     
-                    localStorage.setItem('qitha_finance', JSON.stringify(data));
+                    localStorage.setItem('qitha_finance', JSON.stringify({ contributions: data.contributions, expenses: data.expenses }));
+                    if (data.monthly) {
+                        localStorage.setItem('qitha_monthly_track', JSON.stringify(data.monthly));
+                    }
                     renderFinance();
+                    renderMonthlyTracker();
                     if (statusEl) statusEl.textContent = '✓ Loaded';
                 }
             } catch (err) {
@@ -2397,9 +2543,440 @@
                 isFinanceLoaded = true;
             }
         }
+        // ══════════════════════════════════════════════════════════════
+        // MUREED DATA & UI LOGIC
+        // ══════════════════════════════════════════════════════════════
+        let isMureedsLoaded = false;
+
+        function getMureeds() {
+            const raw = localStorage.getItem('qitha_mureeds');
+            return JSON.parse(raw || '{"mureeds":[]}').mureeds || [];
+        }
+
+        function saveMureedsLocal(mureedsArray) {
+            localStorage.setItem('qitha_mureeds', JSON.stringify({ mureeds: mureedsArray }));
+            if (isMureedsLoaded) saveMureedsToSheets(mureedsArray);
+        }
+
+        async function loadMureedsFromSheets() {
+            if (BAYAH_SHEETS_URL.includes('YOUR_BAYAH_SHEETS_APPS_SCRIPT_URL_HERE')) {
+                isMureedsLoaded = true; return;
+            }
+            const statusEl = document.getElementById('mureedSyncStatus');
+            if (statusEl) statusEl.textContent = '☁️ Loading...';
+            try {
+                const res = await fetch(BAYAH_SHEETS_URL + '?action=load');
+                const data = await res.json();
+                if (data && data.mureeds) {
+                    localStorage.setItem('qitha_mureeds', JSON.stringify({ mureeds: data.mureeds }));
+                    renderMureeds();
+                    if (statusEl) statusEl.textContent = '✓ Loaded';
+                }
+            } catch (err) {
+                console.error('Mureed auto-load error:', err);
+                if (statusEl) statusEl.textContent = '⚠ Load error';
+            } finally {
+                isMureedsLoaded = true;
+            }
+        }
+
+        async function saveMureedsToSheets(mureedsArray) {
+            if (BAYAH_SHEETS_URL.includes('YOUR_BAYAH_SHEETS_APPS_SCRIPT_URL_HERE') || !isMureedsLoaded) return;
+            const statusEl = document.getElementById('mureedSyncStatus');
+            if (statusEl) statusEl.textContent = '☁️ Syncing...';
+            try {
+                const res = await fetch(BAYAH_SHEETS_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=save&data=' + encodeURIComponent(JSON.stringify({ mureeds: mureedsArray }))
+                });
+                if (statusEl) statusEl.textContent = '✓ Synced';
+            } catch (err) {
+                console.error('Mureed auto-save error:', err);
+                if (statusEl) statusEl.textContent = '⚠ Sync error';
+            }
+        }
+
+        // Initialize Mureeds Load on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            loadMureedsFromSheets();
+        });
+
+        function m(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        // Helper to bypass Google Drive's anti-hotlinking block for <img> tags
+        function getSafeImgUrl(url) {
+            if (!url) return '';
+            if (url.includes('drive.google.com/uc')) {
+                const idMatch = url.match(/id=([^&]+)/);
+                if (idMatch) return 'https://drive.google.com/thumbnail?id=' + idMatch[1] + '&sz=w500';
+            }
+            return url;
+        }
+
+        function openMureedModal(id = null) {
+            const modal = document.getElementById('mureedModal');
+            document.getElementById('mureedId').value = id || '';
+            const title = document.getElementById('mureedModalTitle');
+            
+            // ALWAYS CLEAR PREVIOUS FILE SO IT DOESN'T CARRY OVER TO NEXT PERSON
+            const imgInput = document.getElementById('mureedImageInput');
+            if (imgInput) imgInput.value = '';
+
+            if (id) {
+                title.textContent = 'Edit Mureed';
+                const mureeds = getMureeds();
+                const mureed = mureeds.find(x => x.id === id);
+                if (mureed) {
+                    document.getElementById('mureedType').value = mureed.type || 'റിജാൽ';
+                    document.getElementById('mureedName').value = mureed.name || '';
+                    document.getElementById('mureedMurshid').value = mureed.murshid || '';
+                    document.getElementById('mureedAge').value = mureed.age || '';
+                    document.getElementById('mureedAddress').value = mureed.address || '';
+                    document.getElementById('mureedDistrict').value = mureed.district || '';
+                    document.getElementById('mureedKithab').value = mureed.kithab || '';
+                    document.getElementById('mureedMarhala').value = mureed.marhala || '';
+                    document.getElementById('mureedErshad').value = mureed.ershad || '';
+                    document.getElementById('mureedPhone').value = mureed.phone || '';
+                    document.getElementById('mureedRemark').value = mureed.remark || '';
+                    document.getElementById('mureedImageBase64').value = mureed.image || '';
+                    
+                    let safeImg = getSafeImgUrl(mureed.image);
+                    if (safeImg) {
+                        document.getElementById('mureedImagePreview').src = safeImg;
+                        document.getElementById('mureedImagePreview').style.display = 'block';
+                    } else {
+                        document.getElementById('mureedImagePreview').style.display = 'none';
+                    }
+                }
+            } else {
+                title.textContent = 'Add Mureed';
+                document.getElementById('mureedType').value = 'റിജാൽ';
+                ['Name', 'Murshid', 'Age', 'Address', 'District', 'Kithab', 'Marhala', 'Ershad', 'Phone', 'Remark', 'ImageInput'].forEach(fid => {
+                    const el = document.getElementById('mureed' + fid);
+                    if (el) el.value = '';
+                });
+                document.getElementById('mureedImageBase64').value = '';
+                document.getElementById('mureedImagePreview').style.display = 'none';
+            }
+            modal.classList.add('show');
+        }
+
+        function closeMureedModal() {
+            document.getElementById('mureedModal').classList.remove('show');
+        }
+
+        function saveMureedForm() {
+            const id = document.getElementById('mureedId').value;
+            const name = m('mureedName');
+            
+            if (!name) { alert('MUSTHARSHID NAME is required'); return; }
+
+            const entry = {
+                id: id || uid(),
+                type: m('mureedType'),
+                name: name,
+                murshid: m('mureedMurshid'),
+                age: m('mureedAge'),
+                address: m('mureedAddress'),
+                district: m('mureedDistrict'),
+                kithab: m('mureedKithab'),
+                marhala: m('mureedMarhala'),
+                ershad: m('mureedErshad'),
+                phone: m('mureedPhone'),
+                remark: m('mureedRemark'),
+                image: m('mureedImageBase64')
+            };
+
+            const mureeds = getMureeds();
+            if (id) {
+                const idx = mureeds.findIndex(x => x.id === id);
+                if (idx > -1) mureeds[idx] = entry;
+            } else {
+                mureeds.push(entry);
+            }
+
+            saveMureedsLocal(mureeds);
+            closeMureedModal();
+            renderMureeds();
+        }
+
+        function deleteMureed(id) {
+            if (!confirm('Are you sure you want to delete this Mureed?')) return;
+            let mureeds = getMureeds();
+            mureeds = mureeds.filter(x => x.id !== id);
+            saveMureedsLocal(mureeds);
+            renderMureeds();
+        }
+
+        function processMureedImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                document.getElementById('mureedImageBase64').value = dataUrl;
+                document.getElementById('mureedImagePreview').src = dataUrl;
+                document.getElementById('mureedImagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderMureeds() {
+            const container = document.getElementById('mureedsContainer');
+            const mureeds = getMureeds() || [];
+            
+            const searchTerm = document.getElementById('mureedSearch').value.toLowerCase();
+            const filterType = document.getElementById('mureedFilterType') ? document.getElementById('mureedFilterType').value : 'All';
+
+            const filtered = mureeds.filter(m => {
+                const matchesSearch = String(m.name || '').toLowerCase().includes(searchTerm) || 
+                                      String(m.phone || '').toLowerCase().includes(searchTerm) || 
+                                      String(m.address || '').toLowerCase().includes(searchTerm) ||
+                                      String(m.murshid || '').toLowerCase().includes(searchTerm);
+                const matchesType = filterType === 'All' || m.type === filterType;
+                return matchesSearch && matchesType;
+            });
+
+            const modeEle = document.querySelector('input[name="mureedViewMode"]:checked');
+            const mode = modeEle ? modeEle.value : 'card';
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); margin-top: 40px;">No Mureeds found.</p>';
+                return;
+            }
+
+            if (mode === 'card') {
+                container.innerHTML = '<div class="mureed-card-grid">' + filtered.map(m => {
+                    let safeImg = getSafeImgUrl(m.image);
+                    return `
+                    <div class="mureed-card">
+                        <div class="m-actions">
+                            <button onclick="openMureedModal('${m.id}')" title="Edit">✏️</button>
+                            <button onclick="deleteMureed('${m.id}')" title="Delete">🗑️</button>
+                        </div>
+                        <div style="display:flex; gap:12px; align-items:center; margin-bottom: 12px;">
+                            ${safeImg ? `<img src="${safeImg}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-light);">` : `<div style="width:50px; height:50px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:var(--primary); font-weight:bold; font-size:20px;">${m.name.charAt(0)}</div>`}
+                            <div>
+                                <h4 style="margin:0; margin-bottom:4px;">${m.name}</h4>
+                                <p style="font-size: 12px; color: ${m.type==='റിജാൽ' ? '#3f51b5' : (m.type==='സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')}; font-weight:600; margin:0;">${m.type}</p>
+                            </div>
+                        </div>
+                        <p><strong>🤲 Murshid:</strong> ${m.murshid || '-'}</p>
+                        <p><strong>📞 Phone:</strong> ${m.phone || '-'}</p>
+                        <p><strong>📍 District:</strong> ${m.district || '-'}</p>
+                        <p><strong>🏡 Address:</strong> ${m.address || '-'}</p>
+                        <hr style="border: 0; border-top: 1px dashed #eee; margin: 10px 0;" />
+                        <div style="font-size:12px; color:var(--text-secondary); display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+                            <span><strong>Age:</strong> ${m.age||'-'}</span>
+                            <span><strong>Kithab:</strong> ${m.kithab||'-'}</span>
+                            <span><strong>Marhala:</strong> ${m.marhala||'-'}</span>
+                            <span><strong>Ershad:</strong> ${m.ershad||'-'}</span>
+                        </div>
+                        ${m.remark ? `<p style="font-size:12px; color:var(--text-secondary); margin-top:8px;"><strong>Remark:</strong> ${m.remark}</p>` : ''}
+                    </div>
+                `}).join('') + '</div>';
+            } else {
+                container.innerHTML = '<div style="overflow-x:auto;"><table class="mureed-list-view"><thead><tr><th>Photo</th><th>Type</th><th>Name</th><th>Phone</th><th>Murshid</th><th>District</th><th>Marhala</th><th>Actions</th></tr></thead><tbody>' + filtered.map(m => {
+                    let safeImg = getSafeImgUrl(m.image);
+                    return `
+                    <tr>
+                        <td>${safeImg ? `<img src="${safeImg}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:1px solid var(--border-color);">` : `<div style="width:30px; height:30px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:14px; font-weight:bold;">${m.name.charAt(0)}</div>`}</td>
+                        <td><span style="display:inline-block; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:600; background-color:${m.type==='റിജാൽ' ? '#e8edf4' : (m.type==='സയ്യിദാത്ത്' ? '#fce8ef' : '#fff3e0')}; color:${m.type==='റിജാൽ' ? '#3f51b5' : (m.type==='സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')};">${m.type}</span></td>
+                        <td><strong>${m.name}</strong></td>
+                        <td>${m.phone || '-'}</td>
+                        <td>${m.murshid || '-'}</td>
+                        <td>${m.district || '-'}</td>
+                        <td>${m.marhala || '-'}</td>
+                        <td>
+                            <button onclick="openMureedModal('${m.id}')" style="background:none; border:none; cursor:pointer; box-shadow:none; padding:4px;" title="Edit">✏️</button>
+                            <button onclick="deleteMureed('${m.id}')" style="background:none; border:none; cursor:pointer; box-shadow:none; padding:4px;" title="Delete">🗑️</button>
+                        </td>
+                    </tr>
+                `}).join('') + '</tbody></table></div>';
+            }
+        }
+
     </script>
 
+    <!-- Mureed Add/Edit Modal (11 Fields) -->
+    <div class="modal-overlay" id="mureedModal">
+        <div class="modal-content">
+            <h3 id="mureedModalTitle">Add Mureed</h3>
+            <input type="hidden" id="mureedId">
+            
+            <label>Type</label>
+            <select id="mureedType" style="width:100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 15px; margin-bottom: 8px;">
+                <option value="റിജാൽ">റിജാൽ (Rijal)</option>
+                <option value="സയ്യിദാത്ത്">സയ്യിദാത്ത് (Sayyidath)</option>
+                <option value="Kids">Kids</option>
+            </select>
+
+            <label>Mustharshid Name <span style="color: red;">*</span></label>
+            <input type="text" id="mureedName" placeholder="Name" style="margin-bottom: 8px;">
+
+            <label>Photo</label>
+            <div style="margin-bottom: 8px; display:flex; gap:10px; align-items:center;">
+                <input type="file" id="mureedImageInput" accept="image/*" capture="environment" onchange="processMureedImage(event)" style="flex:1;">
+                <img id="mureedImagePreview" style="display:none; width:50px; height:50px; object-fit:cover; border-radius:4px; border:1px solid var(--border-color);">
+                <input type="hidden" id="mureedImageBase64">
+            </div>
+
+            <label>Murshid Name</label>
+            <input type="text" id="mureedMurshid" placeholder="Murshid" style="margin-bottom: 8px;">
+
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label>Age</label>
+                    <input type="text" id="mureedAge" placeholder="Age" style="margin-bottom: 8px;">
+                </div>
+                <div style="flex:1;">
+                    <label>Phone No.</label>
+                    <input type="text" id="mureedPhone" placeholder="Phone" style="margin-bottom: 8px;">
+                </div>
+            </div>
+
+            <label>Home Address</label>
+            <input type="text" id="mureedAddress" placeholder="Address" style="margin-bottom: 8px;">
+
+            <label>District</label>
+            <input type="text" id="mureedDistrict" placeholder="District" style="margin-bottom: 8px;">
+
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label>Kithab Use (Y/N)</label>
+                    <input type="text" id="mureedKithab" placeholder="Y or N" style="margin-bottom: 8px;">
+                </div>
+                <div style="flex:1;">
+                    <label>Marhala</label>
+                    <input type="text" id="mureedMarhala" placeholder="Marhala" style="margin-bottom: 8px;">
+                </div>
+            </div>
+
+            <label>Ershadilulla Varude Ennam</label>
+            <input type="text" id="mureedErshad" placeholder="Ennam" style="margin-bottom: 8px;">
+
+            <label>Remark</label>
+            <input type="text" id="mureedRemark" placeholder="Remark" style="margin-bottom: 8px;">
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeMureedModal()">Cancel</button>
+                <button class="fin-add-btn" onclick="saveMureedForm()" style="margin:0;">Save</button>
+            </div>
+        </div>
+    </div>
+<script>
+    // ══════════════════════════════════════════════════════════════
+    // MONTHLY TRACKER  (localStorage key: qitha_monthly_track)
+    // ══════════════════════════════════════════════════════════════
+    const MONTHS_LIST = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+
+    function getMonthlyData() {
+        return JSON.parse(localStorage.getItem('qitha_monthly_track') || '[]');
+    }
+
+    function saveMonthlyData(data) {
+        localStorage.setItem('qitha_monthly_track', JSON.stringify(data));
+        const el = document.getElementById('monthlySyncStatus');
+        if (el) el.textContent = '✓ Saved locally';
+        if (isFinanceLoaded) saveFinanceToSheets(); // Auto-sync with Finance backend
+    }
+
+    function renderMonthlyTracker() {
+        const data = getMonthlyData();
+        const tbody = document.getElementById('monthlyTableBody');
+        if (!tbody) return;
+
+        if (data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; padding: 24px; color: var(--text-secondary);">No entries yet. Click <strong>+ Add Name</strong> to get started!</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = data.map((person, idx) => {
+            const rowBg = idx % 2 === 0 ? '#ffffff' : '#fafafa';
+            const cells = MONTHS_LIST.map(m => {
+                const checked = person.months && person.months[m] === true;
+                return `<td onclick="toggleTick('${person.id}','${m}')" style="cursor:pointer; text-align:center; padding: 6px; border: 1px solid var(--border-color); font-size: 16px; user-select: none;">${checked ? '✅' : '○'}</td>`;
+            }).join('');
+            return `<tr style="background:${rowBg};">
+                <td style="padding: 8px 12px; border: 1px solid var(--border-color); font-weight: 600; position: sticky; left:0; background:${rowBg}; z-index:5;">${person.name}</td>
+                ${cells}
+                <td class="monthly-del-col" style="text-align:center; border: 1px solid var(--border-color); padding: 4px;">
+                    <button onclick="deleteMonthlyRow('${person.id}')" style="background:none; border:none; cursor:pointer; font-size:16px;" title="Remove">🗑️</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    function addMonthlyPerson() {
+        const name = prompt('Enter person\'s name:');
+        if (!name || !name.trim()) return;
+        const data = getMonthlyData();
+        // uid() is defined in the main script block
+        data.push({ id: uid(), name: name.trim(), months: {} });
+        saveMonthlyData(data);
+        renderMonthlyTracker();
+    }
+
+    function toggleTick(id, month) {
+        const data = getMonthlyData();
+        const person = data.find(p => p.id === id);
+        if (!person) return;
+        person.months = person.months || {};
+        person.months[month] = !person.months[month];
+        saveMonthlyData(data);
+        renderMonthlyTracker();
+    }
+
+    function deleteMonthlyRow(id) {
+        if (!confirm('Remove this person from the tracker?')) return;
+        let data = getMonthlyData().filter(p => p.id !== id);
+        saveMonthlyData(data);
+        renderMonthlyTracker();
+    }
+
+    async function shareMonthlyTracker() {
+        const wrapper = document.getElementById('monthlyTrackerWrapper');
+        const delCols = document.querySelectorAll('.monthly-del-col');
+        
+        // Hide delete column for screenshot
+        delCols.forEach(el => el.style.display = 'none');
+        
+        const badge = document.createElement('div');
+        badge.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1e3a1a;color:white;padding:10px 24px;border-radius:20px;z-index:9999;font-weight:bold;';
+        badge.textContent = '📸 Generating image...';
+        document.body.appendChild(badge);
+
+        try {
+            const table = document.getElementById('monthlyTable');
+            const canvas = await html2canvas(table, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+            canvas.toBlob(async (blob) => {
+                if (!blob) { alert('Failed to generate image.'); return; }
+                const file = new File([blob], 'MonthlyTracker.png', { type: 'image/png' });
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({ title: 'Monthly Tracker', files: [file] });
+                } else {
+                    // Fallback: download the image
+                    const a = document.createElement('a');
+                    a.download = 'MonthlyTracker.png';
+                    a.href = canvas.toDataURL('image/png');
+                    a.click();
+                    alert('Image saved! Attach it manually in WhatsApp.');
+                }
+            }, 'image/png');
+        } catch (err) {
+            console.error(err);
+            alert('Error generating screenshot: ' + err.message);
+        } finally {
+            badge.remove();
+            delCols.forEach(el => el.style.display = '');
+        }
+    }
+</script>
 
 </body>
-
 </html>

@@ -1422,6 +1422,14 @@
                     <div class="s-label">Balance</div>
                     <div class="s-value" id="sumBalance">₹0</div>
                 </div>
+                <div class="summary-card income" style="background:#e8f5e9;">
+                    <div class="s-label">Overall Income</div>
+                    <div class="s-value" id="sumTotalIncome" style="color:var(--primary); font-size:16px;">₹0</div>
+                </div>
+                <div class="summary-card expense" style="background:#ffebee;">
+                    <div class="s-label">Overall Expense</div>
+                    <div class="s-value" id="sumTotalExpense" style="color:#d32f2f; font-size:16px;">₹0</div>
+                </div>
             </div>
 
             <!-- Chart -->
@@ -2559,17 +2567,22 @@
                             <button class="fin-del-btn" onclick="deleteExpense('${e.id}')">✕</button>
                         </div>`).join('');
 
-            // ── Summary — all contributions for selected month + expenses
             const allIncomeThisMonth = fin.contributions.filter(c => isSameMonth(c.date, month, year));
             const totalIncome = allIncomeThisMonth.reduce((s, c) => s + c.amount, 0);
             const totalExpense = expFiltered.reduce((s, e) => s + e.amount, 0);
             const balance = totalIncome - totalExpense;
+
+            const allTimeIncome = fin.contributions.reduce((s, c) => s + c.amount, 0);
+            const allTimeExpense = fin.expenses.reduce((s, e) => s + e.amount, 0);
 
             document.getElementById('sumIncome').textContent = fmt(totalIncome);
             document.getElementById('sumExpense').textContent = fmt(totalExpense);
             const balEl = document.getElementById('sumBalance');
             balEl.textContent = fmt(balance);
             balEl.style.color = balance >= 0 ? '#355e3b' : '#d32f2f';
+
+            document.getElementById('sumTotalIncome').textContent = fmt(allTimeIncome);
+            document.getElementById('sumTotalExpense').textContent = fmt(allTimeExpense);
 
             renderChart(fin);
         }
@@ -2754,6 +2767,7 @@
                     document.getElementById('mureedName').value = mureed.name || '';
                     document.getElementById('mureedMurshid').value = mureed.murshid || '';
                     document.getElementById('mureedAge').value = mureed.age || '';
+                    if (document.getElementById('mureedDOB')) document.getElementById('mureedDOB').value = mureed.dob || '';
                     document.getElementById('mureedAddress').value = mureed.address || '';
                     document.getElementById('mureedDistrict').value = mureed.district || '';
                     document.getElementById('mureedKithab').value = mureed.kithab || '';
@@ -2774,7 +2788,7 @@
             } else {
                 title.textContent = 'Add Mureed';
                 document.getElementById('mureedType').value = 'റിജാൽ';
-                ['Name', 'Murshid', 'Age', 'Address', 'District', 'Kithab', 'Marhala', 'Ershad', 'Phone', 'Remark', 'ImageInput'].forEach(fid => {
+                ['Name', 'Murshid', 'DOB', 'Age', 'Address', 'District', 'Kithab', 'Marhala', 'Ershad', 'Phone', 'Remark', 'ImageInput'].forEach(fid => {
                     const el = document.getElementById('mureed' + fid);
                     if (el) el.value = '';
                 });
@@ -2786,6 +2800,14 @@
 
         function closeMureedModal() {
             document.getElementById('mureedModal').classList.remove('show');
+        }
+        function calcMureedAge() {
+            const dob = document.getElementById('mureedDOB').value;
+            if (dob) {
+                const diff = Date.now() - new Date(dob).getTime();
+                const age = Math.abs(new Date(diff).getUTCFullYear() - 1970);
+                document.getElementById('mureedAge').value = age;
+            }
         }
 
         function saveMureedForm() {
@@ -2799,6 +2821,7 @@
                 type: m('mureedType'),
                 name: name,
                 murshid: m('mureedMurshid'),
+                dob: m('mureedDOB'),
                 age: m('mureedAge'),
                 address: m('mureedAddress'),
                 district: m('mureedDistrict'),
@@ -2891,7 +2914,7 @@
                         <p><strong>🏡 Address:</strong> ${m.address || '-'}</p>
                         <hr style="border: 0; border-top: 1px dashed #eee; margin: 10px 0;" />
                         <div style="font-size:12px; color:var(--text-secondary); display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
-                            <span><strong>Age:</strong> ${m.age || '-'}</span>
+                            <span><strong>Age:</strong> ${m.age || '-'} ${m.dob ? `(DOB: ${m.dob})` : ''}</span>
                             <span><strong>Kithab:</strong> ${m.kithab || '-'}</span>
                             <span><strong>Marhala:</strong> ${m.marhala || '-'}</span>
                             <span><strong>Ershad:</strong> ${m.ershad || '-'}</span>
@@ -2953,8 +2976,11 @@
 
             <div style="display:flex; gap:10px;">
                 <div style="flex:1;">
-                    <label>Age</label>
-                    <input type="text" id="mureedAge" placeholder="Age" style="margin-bottom: 8px;">
+                    <label>DOB / Age</label>
+                    <div style="display:flex; gap:4px; margin-bottom: 8px;">
+                        <input type="date" id="mureedDOB" onchange="calcMureedAge()" style="width: 50%; padding: 8px; border: 1px solid var(--border-color); border-radius: var(--radius-sm);" title="Date of Birth">
+                        <input type="text" id="mureedAge" placeholder="Age" style="width: 50%;">
+                    </div>
                 </div>
                 <div style="flex:1;">
                     <label>Phone No.</label>

@@ -1483,6 +1483,10 @@
         <div class="container">
             <h2>👥 Mureed Details</h2>
 
+            <div class="summary-bar" id="mureedSummaryBar" style="margin-bottom: 20px;">
+                <!-- Rendered dynamically via JS -->
+            </div>
+
             <!-- Controls (Search & View Toggle) -->
             <div style="display: flex; gap: 12px; margin-bottom: 24px; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="mureedSearch" placeholder="Search by name, place, phone..."
@@ -1490,8 +1494,8 @@
                 <select id="mureedFilterType" onchange="renderMureeds()"
                     style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 14px;">
                     <option value="All">All Types</option>
-                    <option value="റിജാൽ">റിജാൽ (Rijal)</option>
-                    <option value="സയ്യിദാത്ത്">സയ്യിദാത്ത് (Sayyidath)</option>
+                    <option value="റിജാൽ">Male</option>
+                    <option value="സയ്യിദാത്ത്">Female</option>
                     <option value="Kids">Kids</option>
                 </select>
                 <div class="radio-group" style="margin: 0; display: flex; align-items: center;">
@@ -2887,6 +2891,33 @@
             const modeEle = document.querySelector('input[name="mureedViewMode"]:checked');
             const mode = modeEle ? modeEle.value : 'card';
 
+            // Render Summary Cards
+            const totalRijal = mureeds.filter(m => m.type === 'റിജാൽ').length;
+            const totalSayyidath = mureeds.filter(m => m.type === 'സയ്യിദാത്ത്').length;
+            const totalKids = mureeds.filter(m => m.type === 'Kids').length;
+            const totalAll = mureeds.length;
+            
+            const summaryHtml = `
+                <div class="summary-card" style="background:#e8edf4;">
+                    <div class="s-label" style="font-size: 12px; color: #3f51b5; font-weight: bold;">👨🏼 Male</div>
+                    <div class="s-value" style="color:#3f51b5;">${totalRijal}</div>
+                </div>
+                <div class="summary-card" style="background:#fce8ef;">
+                    <div class="s-label" style="font-size: 12px; color: #e91e63; font-weight: bold;">🧕🏼 Female</div>
+                    <div class="s-value" style="color:#e91e63;">${totalSayyidath}</div>
+                </div>
+                <div class="summary-card" style="background:#fff3e0;">
+                    <div class="s-label" style="font-size: 12px; color: #ff9800; font-weight: bold;">🤸🏼 Kids</div>
+                    <div class="s-value" style="color:#ff9800;">${totalKids}</div>
+                </div>
+                <div class="summary-card balance">
+                    <div class="s-label" style="font-size: 12px; font-weight: bold;">🌍 Total</div>
+                    <div class="s-value">${totalAll}</div>
+                </div>
+            `;
+            const summaryBar = document.getElementById('mureedSummaryBar');
+            if (summaryBar) summaryBar.innerHTML = summaryHtml;
+
             if (filtered.length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); margin-top: 40px;">No Mureeds found.</p>';
                 return;
@@ -2905,7 +2936,9 @@
                             ${safeImg ? `<img src="${safeImg}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-light);">` : `<div style="width:50px; height:50px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:var(--primary); font-weight:bold; font-size:20px;">${m.name.charAt(0)}</div>`}
                             <div>
                                 <h4 style="margin:0; margin-bottom:4px;">${m.name}</h4>
-                                <p style="font-size: 12px; color: ${m.type === 'റിജാൽ' ? '#3f51b5' : (m.type === 'സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')}; font-weight:600; margin:0;">${m.type}</p>
+                                <p style="font-size: 12px; color: ${m.type === 'റിജാൽ' ? '#3f51b5' : (m.type === 'സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')}; font-weight:600; margin:0;">
+                                    ${m.type === 'റിജാൽ' ? 'Male' : (m.type === 'സയ്യിദാത്ത്' ? 'Female' : 'Kids')}
+                                </p>
                             </div>
                         </div>
                         <p><strong>🤲 Murshid:</strong> ${m.murshid || '-'}</p>
@@ -2928,7 +2961,7 @@
                     return `
                     <tr>
                         <td>${safeImg ? `<img src="${safeImg}" style="width:30px; height:30px; border-radius:50%; object-fit:cover; border:1px solid var(--border-color);">` : `<div style="width:30px; height:30px; border-radius:50%; background:var(--primary-light); display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:14px; font-weight:bold;">${m.name.charAt(0)}</div>`}</td>
-                        <td><span style="display:inline-block; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:600; background-color:${m.type === 'റിജാൽ' ? '#e8edf4' : (m.type === 'സയ്യിദാത്ത്' ? '#fce8ef' : '#fff3e0')}; color:${m.type === 'റിജാൽ' ? '#3f51b5' : (m.type === 'സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')};">${m.type}</span></td>
+                        <td><span style="display:inline-block; padding:2px 8px; border-radius:12px; font-size:12px; font-weight:600; background-color:${m.type === 'റിജാൽ' ? '#e8edf4' : (m.type === 'സയ്യിദാത്ത്' ? '#fce8ef' : '#fff3e0')}; color:${m.type === 'റിജാൽ' ? '#3f51b5' : (m.type === 'സയ്യിദാത്ത്' ? '#e91e63' : '#ff9800')};">${m.type === 'റിജാൽ' ? 'Male' : (m.type === 'സയ്യിദാത്ത്' ? 'Female' : 'Kids')}</span></td>
                         <td><strong>${m.name}</strong></td>
                         <td>${m.phone || '-'}</td>
                         <td>${m.murshid || '-'}</td>
@@ -2954,8 +2987,8 @@
             <label>Type</label>
             <select id="mureedType"
                 style="width:100%; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 15px; margin-bottom: 8px;">
-                <option value="റിജാൽ">റിജാൽ (Rijal)</option>
-                <option value="സയ്യിദാത്ത്">സയ്യിദാത്ത് (Sayyidath)</option>
+                <option value="റിജാൽ">Male</option>
+                <option value="സയ്യിദാത്ത്">Female</option>
                 <option value="Kids">Kids</option>
             </select>
 
